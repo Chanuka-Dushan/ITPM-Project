@@ -1,16 +1,15 @@
 import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import ChatBot from "./chat-bot/bot";
 
 const App = () => {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-100 p-6">
-      <div className="max-w-lg rounded-2xl bg-white p-8 shadow-lg">
-        <h1 className="text-2xl font-bold text-gray-800">
-          Hello, This is our ITPM Project!
-        </h1>
-        <p className="mt-2 text-gray-600">You can start your project from here.</p>
-        <p className="mt-4 text-lg font-semibold text-blue-600">Happy Coding! 🚀</p>
-      </div>
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<div>Home page here</div>} />
+        <Route path="/chatbot" element={<ChatBot/>} />
+      </Routes>
+    </Router>
   );
 };
 
