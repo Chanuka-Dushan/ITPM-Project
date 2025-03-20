@@ -60,34 +60,96 @@ const ChatBot = () => {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 p-6">
-      <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.5 }} className="w-full max-w-lg rounded-lg bg-white p-6 shadow-xl">
-        <div className="text-center text-3xl font-semibold text-gray-800 mb-6">ChatBot</div>
-        <div className="border rounded-lg bg-white p-4 shadow-lg flex flex-col h-[400px]">
-          <div className="flex justify-between items-center bg-blue-600 text-white p-4 rounded-t-lg">
-            <span className="font-semibold text-lg">ChatBot</span>
-            <button className="rounded-full bg-white p-2 text-gray-700 transition-all duration-200 hover:bg-red-200 hover:scale-110" onClick={() => setMessages([])}>❌</button>
-          </div>
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1 }} className="flex flex-col flex-grow overflow-y-auto p-4 bg-gray-100 rounded-b-lg shadow-inner">
-            <div className="flex flex-col space-y-2 text-gray-800">
-              {messages.map((msg, index) => (
-                <div key={index} className={`flex items-center gap-2 mb-4 ${msg.sender === "user" ? "justify-end" : "justify-start"}`}>
-                  {msg.sender === "bot" && <img src={botImg} className='w-8 h-8 rounded-full' alt='Bot' />}
-                  <div className={`p-3 rounded-lg max-w-xs shadow-md ${msg.sender === "user" ? "bg-blue-500 text-white" : "bg-gray-600 text-white"}`}>
-                    {msg.message}
-                  </div>
-                  {msg.sender === "user" && <img src={userImg} className='w-8 h-8 rounded-full' alt='User' />}
-                </div>
-              ))}
+    <div className="min-h-screen w-full bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-800 flex flex-col">
+     
+      <motion.div 
+        initial={{ y: -50, opacity: 0 }} 
+        animate={{ y: 0, opacity: 1 }} 
+        transition={{ duration: 0.5 }}
+        className="p-4 flex justify-between items-center bg-opacity-20 bg-black backdrop-blur-lg sticky top-0 z-10"
+      >
+        <h1 className="text-2xl md:text-3xl font-bold text-white tracking-wide">AI RECIPE AGENT</h1>
+        <button 
+          onClick={() => setMessages([])} 
+          className="text-white hover:text-red-400 transition-all duration-200 transform hover:scale-110"
+        >
+          ✕ Clear
+        </button>
+      </motion.div>
+
+      
+      <motion.div 
+        initial={{ opacity: 0 }} 
+        animate={{ opacity: 1 }} 
+        transition={{ duration: 0.8 }}
+        className="flex-grow overflow-y-auto p-6 space-y-4"
+      >
+        {messages.map((msg, index) => (
+          <motion.div
+            key={index}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3 }}
+            className={`flex items-start gap-3 ${msg.sender === "user" ? "justify-end" : "justify-start"}`}
+          >
+            {msg.sender === "bot" && (
+              <img src={botImg} className="w-10 h-10 rounded-full border-2 border-purple-400" alt="Bot" />
+            )}
+            <div
+              className={`max-w-xs md:max-w-md p-4 rounded-xl shadow-lg text-white ${
+                msg.sender === "user"
+                  ? "bg-blue-600 bg-opacity-90"
+                  : "bg-purple-700 bg-opacity-90"
+              }`}
+            >
+              {msg.message}
+            </div>
+            {msg.sender === "user" && (
+              <img src={userImg} className="w-10 h-10 rounded-full border-2 border-blue-400" alt="User" />
+            )}
+          </motion.div>
+        ))}
+        {isTyping && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="flex items-center gap-3"
+          >
+            <img src={botImg} className="w-10 h-10 rounded-full border-2 border-purple-400" alt="Bot" />
+            <div className="bg-purple-700 bg-opacity-90 p-4 rounded-xl shadow-lg text-white flex items-center gap-2">
+              <div className="w-2 h-2 bg-white rounded-full animate-bounce"></div>
+              <div className="w-2 h-2 bg-white rounded-full animate-bounce delay-100"></div>
+              <div className="w-2 h-2 bg-white rounded-full animate-bounce delay-200"></div>
             </div>
           </motion.div>
-          <div className="mt-3 flex gap-2">
-            <input type="text" placeholder="Type a message..." className="flex-1 p-3 rounded-lg border border-gray-300 text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent" value={userMessage} onChange={(e) => setUserMessage(e.target.value)} onKeyPress={handleKeyPress} />
-            <button className="rounded-lg bg-blue-500 px-6 py-3 text-white transition-all duration-200 hover:bg-blue-600 hover:scale-105" onClick={sendMessage}>
-              {isTyping ? <div className="animate-spin w-6 h-6 border-4 border-t-transparent border-blue-500 rounded-full"></div> : "Send"}
-            </button>
-          </div>
-        </div>
+        )}
+      </motion.div>
+
+      {/* Input Area */}
+      <motion.div 
+        initial={{ y: 50, opacity: 0 }} 
+        animate={{ y: 0, opacity: 1 }} 
+        transition={{ duration: 0.5 }}
+        className="p-4 bg-opacity-20 bg-black backdrop-blur-lg sticky bottom-0 z-10 flex items-center gap-4 w-full max-w-full"
+      >
+        <input
+          type="text"
+          placeholder="Type your message..."
+          className="flex-grow p-3 rounded-full bg-gray-800 bg-opacity-50 text-white placeholder-gray-400 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all duration-200 min-w-0"
+          value={userMessage}
+          onChange={(e) => setUserMessage(e.target.value)}
+          onKeyPress={handleKeyPress}
+        />
+        <button
+          onClick={sendMessage}
+          className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-3 rounded-full hover:from-purple-600 hover:to-pink-600 transition-all duration-200 transform hover:scale-105 flex items-center justify-center shrink-0"
+        >
+          {isTyping ? (
+            <div className="w-6 h-6 border-4 border-t-transparent border-white rounded-full animate-spin"></div>
+          ) : (
+            "Send"
+          )}
+        </button>
       </motion.div>
     </div>
   );
