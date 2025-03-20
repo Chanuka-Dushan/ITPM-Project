@@ -1,6 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import ChatBot from "./chat-bot/bot";
+import MealPlanning from "./pages/MealPlanning";
 import App from "./App";
 import {
   Dashboard,
@@ -35,6 +36,7 @@ const AppRouter = () => {
           <Route path="/line" element={<Line />} />
           <Route path="/faq" element={<FAQ />} />
           <Route path="/geography" element={<Geography />} />
+          <Route path="/mealplanning" element={<MealPlanning />} />
         </Route>
       </Routes>
     </Router>
