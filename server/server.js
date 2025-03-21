@@ -23,20 +23,80 @@ const upload = multer({ storage: multer.memoryStorage() });
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
 
+// Hardcoded recipes
+const recipes = {
+  "Spaghetti Bolognese": {
+    description: "A classic Italian pasta dish with a rich, flavorful meat sauce.",
+    steps: [
+      "First, cook the spaghetti according to the package instructions.",
+      "While that's cooking, heat up a pan and cook ground beef along with some onions and garlic.",
+      "Next, add tomato sauce and let it simmer for about 15 to 20 minutes.",
+      "Once everything's done, serve the sauce over the spaghetti and top it with some cheese."
+    ]
+  },
+  "Chicken Curry": {
+    description: "A spicy and savory chicken dish with a rich curry sauce.",
+    steps: [
+      "Start by cooking the chicken pieces until they’re nice and browned.",
+      "Then, add onions, garlic, and curry spices, and cook them for about five minutes.",
+      "Now, pour in the coconut milk and let it simmer until the chicken is tender.",
+      "Serve it up with some rice or naan bread for a complete meal."
+    ]
+  },
+  "Caesar Salad": {
+    description: "A fresh salad with romaine lettuce, croutons, and Caesar dressing.",
+    steps: [
+      "Chop up some fresh romaine lettuce and toss it with croutons.",
+      "Drizzle Caesar dressing over the top and toss everything together until it’s evenly coated.",
+      "Finally, sprinkle some Parmesan cheese on top and serve it right away."
+    ]
+  },
+  "Vegetable Stir Fry": {
+    description: "A healthy stir fry with mixed vegetables in a savory sauce.",
+    steps: [
+      "Heat up some oil in a pan and stir fry your favorite mixed vegetables.",
+      "After a few minutes, add soy sauce, garlic, and a little bit of ginger. Stir it all together and cook for another 5 minutes.",
+      "Once everything’s nicely cooked, serve it up over rice or noodles."
+    ]
+  },
+  "Chocolate Cake": {
+    description: "A rich and moist chocolate cake topped with frosting.",
+    steps: [
+      "Preheat your oven and get your cake pan ready.",
+      "Mix flour, cocoa powder, sugar, eggs, and butter together in a bowl.",
+      "Pop the mixture into the oven and bake for about 30 to 35 minutes. Once done, let it cool.",
+      "Finally, frost the cake with some chocolate icing, and you’re ready to serve!"
+    ]
+  }
+};
+
+
 // Simple rule-based dialogue management for voice chatbot
 const getVoiceBotResponse = (userInput) => {
   console.log("Processing user input:", userInput);
   userInput = userInput.toLowerCase();
-  if (userInput.includes("hello") || userInput.includes("hi")) {
-    return "Hello! I am Botty, how can I help you today?";
+
+  if (userInput.includes("hi") || userInput.includes("Botty")) {
+    return "Hello! I am Botty, I am here to Assist you?";
   } else if (userInput.includes("name") || userInput.includes("who are you")) {
     return "I’m an AI-powered Chatbot. Nice to meet you!";
   } else if (userInput.includes("bye") || userInput.includes("goodbye")) {
     return "Goodbye! Feel free to come back anytime.";
-  } else if (userInput.includes("what can") || userInput.includes("do")) {
+  } else if (userInput.includes("what can") || userInput.includes("what do you do")) {
     return "I can help you manage your recipes and assist you with cooking in real-time!";
+  } else if(userInput.includes("thank you") || userInput.includes("thanks")) {
+    return "You're welcome! Let me know if you need help with anything else.";
+  }else if (userInput.includes("do you have recipes")) {
+    return `I have 5 recipes: ${Object.keys(recipes).join(", ")}. Ask me to describe any of them!`;
   } else {
-    return "Sorry, I didn’t understand that. I’m still training to understand you better. Sorry for the inconvenience!";
+    // Check if the user is asking for a recipe description
+    for (const recipeName in recipes) {
+      if (userInput.includes(recipeName.toLowerCase())) {
+        return `Here is how you make ${recipeName}:\n${recipes[recipeName].steps.join("\n")}`;
+      }
+    }
+
+    return "I didn’t understand that. I’m still training to understand you better";
   }
 };
 
