@@ -29,6 +29,13 @@ const MealPlanningDate = () => {
     suggestions: "",
   });
 
+  // Time validation error messages
+  const [timeErrors, setTimeErrors] = useState({
+    breakfast: "",
+    lunch: "",
+    dinner: ""
+  });
+
   // State for recipes
   const [recipes, setRecipes] = useState(defaultRecipes);
   
@@ -58,12 +65,53 @@ const MealPlanningDate = () => {
   // Whether to show the meal scheduling modal
   const [showScheduler, setShowScheduler] = useState(false);
 
+  // Convert 24-hour time to 12-hour format with AM/PM
+  const convertTo12Hour = (time24) => {
+    if (!time24) return "";
+    const [hours, minutes] = time24.split(":");
+    const hour = parseInt(hours);
+    const meridiem = hour >= 12 ? "PM" : "AM";
+    const hour12 = hour % 12 || 12;
+    return `${hour12}:${minutes} ${meridiem}`;
+  };
+
+  // Extract hours from time input for validation
+  const getHoursFromTime = (timeString) => {
+    if (!timeString) return null;
+    const [hours] = timeString.split(":");
+    return parseInt(hours);
+  };
+
+  const validateTime = (name, value) => {
+    let error = "";
+    const hours = getHoursFromTime(value);
+    
+    if (value && hours !== null) {
+      if (name === "breakfast" && hours >= 12) {
+        error = "Breakfast time must be in AM (before 12:00)";
+      } else if ((name === "lunch" || name === "dinner") && hours < 12) {
+        error = `${name.charAt(0).toUpperCase() + name.slice(1)} time must be in PM (12:00 or later)`;
+      }
+    }
+    
+    return error;
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
 
     // Validate calorie field to prevent negative numbers
     if (name === "calorie" && value < 0) {
       return; // Prevent setting negative calorie values
+    }
+
+    // Validate time fields
+    if (["breakfast", "lunch", "dinner"].includes(name)) {
+      const error = validateTime(name, value);
+      setTimeErrors(prev => ({
+        ...prev,
+        [name]: error
+      }));
     }
 
     setFormData((prev) => ({
@@ -148,6 +196,15 @@ const MealPlanningDate = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    
+    // Check for time validation errors
+    const hasTimeErrors = Object.values(timeErrors).some(error => error !== "");
+    
+    if (hasTimeErrors) {
+      alert("Please fix time errors before submitting");
+      return;
+    }
+    
     // Include meal schedule in the form submission
     const formSubmission = {
       ...formData,
@@ -198,6 +255,17 @@ const MealPlanningDate = () => {
     display: "block",
     margin: "0 auto",
     color: "black",
+  };
+
+  const errorInputStyle = {
+    ...inputStyle,
+    borderColor: "#e74c3c",
+  };
+
+  const errorMessageStyle = {
+    color: "#e74c3c",
+    fontSize: "0.8rem",
+    marginTop: "0.2rem",
   };
 
   const textareaStyle = {
@@ -341,6 +409,12 @@ const MealPlanningDate = () => {
     fontWeight: "500",
   };
 
+  const timeHintStyle = {
+    fontSize: "0.7rem",
+    color: "#666",
+    marginTop: "0.1rem",
+  };
+
   const filteredRecipes = getFilteredRecipes();
 
   return (
@@ -367,34 +441,40 @@ const MealPlanningDate = () => {
             <div>
               <label style={labelStyle}>Breakfast</label>
               <input
-                style={inputStyle}
+                style={timeErrors.breakfast ? errorInputStyle : inputStyle}
                 type="time"
                 name="breakfast"
                 value={formData.breakfast}
                 onChange={handleChange}
               />
+              {timeErrors.breakfast && <div style={errorMessageStyle}>{timeErrors.breakfast}</div>}
+              <div style={timeHintStyle}>Morning hours only (AM)</div>
             </div>
 
             <div>
               <label style={labelStyle}>Lunch</label>
               <input
-                style={inputStyle}
+                style={timeErrors.lunch ? errorInputStyle : inputStyle}
                 type="time"
                 name="lunch"
                 value={formData.lunch}
                 onChange={handleChange}
               />
+              {timeErrors.lunch && <div style={errorMessageStyle}>{timeErrors.lunch}</div>}
+              <div style={timeHintStyle}>Afternoon hours only (PM)</div>
             </div>
 
             <div>
               <label style={labelStyle}>Dinner</label>
               <input
-                style={inputStyle}
+                style={timeErrors.dinner ? errorInputStyle : inputStyle}
                 type="time"
                 name="dinner"
                 value={formData.dinner}
                 onChange={handleChange}
               />
+              {timeErrors.dinner && <div style={errorMessageStyle}>{timeErrors.dinner}</div>}
+              <div style={timeHintStyle}>Evening hours only (PM)</div>
             </div>
           </div>
         </div>
