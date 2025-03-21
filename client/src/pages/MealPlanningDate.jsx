@@ -419,7 +419,7 @@ const MealPlanningDate = () => {
 
   return (
     <div style={formStyle}>
-      <h1 style={titleStyle}>Meal Planning Form</h1>
+      <h1 style={titleStyle}>Meal Scheduling</h1>
       <form onSubmit={handleSubmit}>
         <div style={fieldStyle}>
           <label style={labelStyle}>User Name</label>
