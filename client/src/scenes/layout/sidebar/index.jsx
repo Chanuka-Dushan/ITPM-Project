@@ -6,6 +6,8 @@ import { Menu, MenuItem, Sidebar } from "react-pro-sidebar";
 import {
   BarChartOutlined,
   CalendarTodayOutlined,
+  SmartToy,
+  SupportAgent,
   ContactsOutlined,
   DashboardOutlined,
   DonutLargeOutlined,
@@ -163,7 +165,13 @@ const SideBar = () => {
             title="Chat Bot"
             path={"./chatbot"}
             colors={colors}
-            icon={<PeopleAltOutlined />}
+            icon={<SmartToy />}
+          />
+          <Item
+            title="Talk with Our Bot"
+            path={"./talkbot"}
+            colors={colors}
+            icon={<SupportAgent />}
           />
           <Item
             title="Contacts Information"
@@ -215,14 +223,14 @@ const SideBar = () => {
             icon={<HelpOutlineOutlined />}
           />
         </Menu>
-        <Typography
+        {/* <Typography
           variant="h6"
           color={colors.gray[300]}
           sx={{ m: "15px 0 5px 20px" }}
         >
           {!collapsed ? "Charts" : " "}
-        </Typography>
-        <Menu
+        </Typography> */}
+        {/* <Menu
           menuItemStyles={{
             button: {
               ":hover": {
@@ -263,7 +271,7 @@ const SideBar = () => {
             colors={colors}
             icon={<WavesOutlined />}
           />
-        </Menu>
+        </Menu> */}
       </Box>
     </Sidebar>
   );
