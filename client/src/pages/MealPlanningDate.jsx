@@ -1,6 +1,8 @@
+
+
 import React, { useState } from "react";
 
-const MealPlanning = () => {
+const MealPlanningDate = () => {
   const [formData, setFormData] = useState({
     UserName: "",
     dayspreferred: "",
@@ -116,18 +118,7 @@ const MealPlanning = () => {
           />
         </div>
 
-        <div style={fieldStyle}>
-          <label style={labelStyle}>Preferred Days Category</label>
-          <input
-            style={inputStyle}
-            type="text"
-            name="dayspreferred"
-            value={formData.dayspreferred}
-            onChange={handleChange}
-            placeholder="ex: Weekday/Weekend/Both"
-            required
-          />
-        </div>
+       
 
         <div style={fieldStyle}>
           <label style={labelStyle}>Meal Types Preferred</label>
@@ -142,32 +133,41 @@ const MealPlanning = () => {
           />
         </div>
 
-        <div style={fieldStyle}>
-          <label style={labelStyle}>Calorie Limit</label>
-          <input
-            style={inputStyle}
-            name="calorie"
-            type="number"
-            value={formData.calorie}
-            onChange={handleChange}
-            placeholder="Enter your daily calorie goal"
-            required
-          />
-        </div>
+        
 
-        <div style={fieldStyle}>
+         {/* Meal Time Preferences Section */}
+         <div style={fieldStyle}>
           <label style={labelStyle}>Meal Time Preferences</label>
+
+          <label style={labelStyle}>Breakfast Time</label>
           <input
             style={inputStyle}
-            name="timepreferred"
-            type="text"
-            value={formData.timepreferred}
+            type="time"
+            name="breakfast"
+            value={formData.breakfast}
             onChange={handleChange}
-            placeholder="ex: Breakfast/Lunch/Dinner/All"
-            required
           />
-        </div>
 
+          <label style={labelStyle}>Lunch Time</label>
+          <input
+            style={inputStyle}
+            type="time"
+            name="lunch"
+            value={formData.lunch}
+            onChange={handleChange}
+          />
+
+          <label style={labelStyle}>Dinner Time</label>
+          <input
+            style={inputStyle}
+            type="time"
+            name="dinner"
+            value={formData.dinner}
+            onChange={handleChange}
+          />
+
+          
+        </div>
         <div style={fieldStyle}>
           <label style={labelStyle}>Suggestions</label>
           <textarea
@@ -188,4 +188,4 @@ const MealPlanning = () => {
   );
 };
 
-export default MealPlanning;
+export default MealPlanningDate;

@@ -1,7 +1,8 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import ChatBot from "./chat-bot/bot";
-import MealPlanning from "./pages/MealPlanning"
+import MealPlanningDetails from "./pages/MealPlanningDetails"
+import MealPlanningDate from "./pages/MealPlanningDate"
 import TalkBot from "./talk-bot/talkbot";
 import App from "./App";
 import {
@@ -38,7 +39,8 @@ const AppRouter = () => {
           <Route path="/line" element={<Line />} />
           <Route path="/faq" element={<FAQ />} />
           <Route path="/geography" element={<Geography />} />
-          <Route path="/mealplanning" element={<MealPlanning />} />
+          <Route path="/mealplanningdetails" element={<MealPlanningDetails />} />
+          <Route path="/mealplanningdate" element={<MealPlanningDate />} />
         </Route>
       </Routes>
     </Router>
