@@ -62,7 +62,7 @@ const DashBoard = () => {
   const textareaStyle = {
     ...inputStyle,
     minHeight: '120px',
-    resize: 'vertical'
+    resize: 'vertical' 
   };
 
   const buttonStyle = {
