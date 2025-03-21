@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import ChatBot from "./chat-bot/bot";
-import MealPlanning from "./pages/MealPlanning";
+import MealPlanning from "./pages/MealPlanning"
 import TalkBot from "./talk-bot/talkbot";
 import App from "./App";
 import {
