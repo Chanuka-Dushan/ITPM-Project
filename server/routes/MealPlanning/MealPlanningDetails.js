@@ -1,7 +1,6 @@
 import { Router } from "express";
 const router = Router();
-import { addRecipe, getRecipes, getRecipeById, updateRecipe, deleteRecipe } from '../../Controllers/RecipeManagement/recipeController.js';
-
+import { addRecipe, getRecipes, getRecipeById, updateRecipe, deleteRecipe } from '../../Controllers/MealPlanning/MealPlanningDate.js';
 router.post("/add", addRecipe);
 router.get("/get", getRecipes);
 router.get("/:id", getRecipeById);

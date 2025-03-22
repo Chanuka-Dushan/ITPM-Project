@@ -1,7 +1,8 @@
 // const mongoose = require("mongoose");
 import { Schema, model } from "mongoose";
+import mongoose from "mongoose";
 
-const RecipeSchema = new Schema({
+const MealPlanningDetails = new mongoose.Schema({
 
   //_id: { type: String, required: true }, 
   RecipeID: { type: String, required: true },
@@ -14,4 +15,4 @@ const RecipeSchema = new Schema({
   
 });
 
-export default model("Recipe", RecipeSchema);
+export default mongoose.model("RDetails", MealPlanningDetails);

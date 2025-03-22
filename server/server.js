@@ -5,6 +5,8 @@ import cors from "cors";
 import dotenv from "dotenv";
 import fetch from "node-fetch";
 import multer from "multer";
+import MealPlanningDate from "./routes/MealPlanning/MealPlanningDate.js"
+import MealPlanningDetails from "./routes/MealPlanning/MealPlanningDetails.js";
 
 dotenv.config();
 
@@ -118,6 +120,9 @@ mongoose
   .connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log("MongoDB Connected"))
   .catch((err) => console.log(err));
+
+  app.use("api/mealplanningdate",MealPlanningDate)
+  app.use("api/mealplanningdetails",MealPlanningDetails)
 
 // Sample Route
 app.get("/", (req, res) => {
