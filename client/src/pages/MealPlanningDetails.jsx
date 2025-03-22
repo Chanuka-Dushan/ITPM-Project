@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
-const MealPlanningDetails = () => {
+const MealPlanningDetails = ({ mealPlanId }) => {
   const [formData, setFormData] = useState({
     UserName: "",
     dayspreferred: "",
@@ -10,18 +10,41 @@ const MealPlanningDetails = () => {
     suggestions: "",
   });
 
+  const [successMessage, setSuccessMessage] = useState("");
+  const [isUpdate, setIsUpdate] = useState(false);
+
+  useEffect(() => {
+    console.log("mealPlanId in useEffect:", mealPlanId); // Log the mealPlanId
+    if (mealPlanId) {
+      fetch(`http://localhost:5000/api/mealplans/${mealPlanId}`)
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Failed to fetch meal plan data");
+          }
+          return response.json();
+        })
+        .then((data) => {
+          console.log("Fetched meal plan data:", data); // Log fetched data
+          setFormData(data);
+          setIsUpdate(true); // Set to update mode
+        })
+        .catch((error) => {
+          console.error("Error fetching meal plan:", error);
+          alert("Failed to fetch meal plan. Please check the backend or API.");
+        });
+    }
+  }, [mealPlanId]);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
 
-    // Validate for calorie field to prevent negative numbers
     if (name === "calorie" && value < 0) {
       return; // Prevent setting negative calorie values
     }
 
-    // Validate for text-only fields (no numbers or special characters)
     if (
       (name === "dayspreferred" || name === "mealspreferred" || name === "timepreferred") &&
-      /[^a-zA-Z\s]/.test(value) // Checks for any character that's not a letter or space
+      /[^a-zA-Z\s]/.test(value) // Validate to allow only text and spaces
     ) {
       return; // Prevent updating state if invalid character is found
     }
@@ -32,9 +55,43 @@ const MealPlanningDetails = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form Data:", formData);
+    console.log("Form Data on Submit:", formData);
+
+    const method = isUpdate ? "PUT" : "POST";
+    const url = isUpdate
+      ? `http://localhost:5000/api/mealplans/${mealPlanId}`
+      : "http://localhost:5000/api/mealplans";
+
+    try {
+      const response = await fetch(url, {
+        method,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (!response.ok) {
+        throw new Error(isUpdate ? "Failed to update meal plan" : "Failed to submit meal plan");
+      }
+
+      const result = await response.json();
+      console.log(`${isUpdate ? "Updated" : "Submitted"} meal plan successfully:`, result);
+
+      setSuccessMessage(`${isUpdate ? "Updated" : "Submitted"} meal plan successfully!`);
+      setFormData({
+        UserName: "",
+        dayspreferred: "",
+        mealspreferred: "",
+        calorie: "",
+        timepreferred: "",
+        suggestions: "",
+      });
+    } catch (error) {
+      console.error(isUpdate ? "Error updating meal plan:" : "Error submitting meal plan:", error);
+    }
   };
 
   const formStyle = {
@@ -99,9 +156,16 @@ const MealPlanningDetails = () => {
     margin: "1rem auto",
   };
 
+  const successStyle = {
+    color: "green",
+    fontSize: "1rem",
+    marginBottom: "1rem",
+  };
+
   return (
     <div style={formStyle}>
-      <h1 style={titleStyle}>Recipe Details Form</h1>
+      <h1 style={titleStyle}>{isUpdate ? "Update Meal Plan" : "Recipe Details Form"}</h1>
+      {successMessage && <div style={successStyle}>{successMessage}</div>}
       <form onSubmit={handleSubmit}>
         <div style={fieldStyle}>
           <label style={labelStyle}>User Name</label>
@@ -181,7 +245,7 @@ const MealPlanningDetails = () => {
         </div>
 
         <button type="submit" style={buttonStyle}>
-          Submit
+          {isUpdate ? "Update" : "Submit"}
         </button>
       </form>
     </div>

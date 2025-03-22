@@ -29,6 +29,7 @@ const AppRouter = () => {
           <Route path="/" element={<Dashboard />} />
           <Route path="/chatbot" element={<ChatBot/>} />
           <Route path="/talkbot" element={<TalkBot />} />
+          <Route path="/mealplanning/:mealPlanId" component={MealPlanningDetails} />
           <Route path="/team" element={<Team />} />
           <Route path="/contacts" element={<Contacts />} />
           <Route path="/invoices" element={<Invoices />} />

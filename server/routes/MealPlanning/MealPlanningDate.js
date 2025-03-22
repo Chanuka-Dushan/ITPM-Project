@@ -1,11 +1,12 @@
-import { Router } from "express";
-const router = Router();
-import { addRecipe, getRecipes, getRecipeById, updateRecipe, deleteRecipe } from '../../Controllers/MealPlanning/MealPlanningDate.js';
+// mealPlan.routes.js
+const express = require('express');
+const router = express.Router();
+const mealPlanController = require('./mealPlan.controller');
 
-router.post("/add", addRecipe);
-router.get("/get", getRecipes);
-router.get("/:id", getRecipeById);
-router.put("/:id", updateRecipe);
-router.delete("/:id", deleteRecipe);
+// Routes
+router.post('/create', mealPlanController.createMealPlan);
+router.get('/:userName', mealPlanController.getMealPlan);
+router.put('/:id', mealPlanController.updateMealPlan);
+router.delete('/:id', mealPlanController.deleteMealPlan);
 
-export default router;
+module.exports = router;

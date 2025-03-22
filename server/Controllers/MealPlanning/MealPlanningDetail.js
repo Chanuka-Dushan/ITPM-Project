@@ -1,72 +1,78 @@
-import Recipe from "../../Models/RecipeManagement/recipeModel.js";
+// controllers/MealPlanningController.js
+import MealPlanning from "../../Models/MealPlanning/MealPlanningDetails.js";
 
-// Add Recipe
-export async function addRecipe(req, res) {
+// Fetch all meal plans
+export const getAllMealPlans = async (req, res) => {
   try {
-    const recipe = new Recipe(req.body);
-    await recipe.save();
-    res.status(201).json(recipe);
+    const mealPlans = await MealPlanning.find();
+    res.status(200).json(mealPlans);
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    res.status(500).json({ message: 'Error fetching meal plans', error });
   }
-}
+};
 
-// Get All Recipes
-export async function getRecipes(req, res) {
+// Fetch a single meal plan by ID
+export const getMealPlanById = async (req, res) => {
+  const { id } = req.params;
   try {
-    const recipes = await Recipe.find().sort({ createdAt: -1 });
-    res.status(200).json(recipes);
+    const mealPlan = await MealPlanning.findById(id);
+    if (!mealPlan) {
+      return res.status(404).json({ message: 'Meal plan not found' });
+    }
+    res.status(200).json(mealPlan);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ message: 'Error fetching meal plan', error });
   }
-}
+};
 
-// Get Recipe by ID
-export async function getRecipeById(req, res) {
+// Create a new meal plan
+export const createMealPlan = async (req, res) => {
+  const { UserName, dayspreferred, mealspreferred, calorie, timepreferred, suggestions } = req.body;
   try {
-    const recipe = await Recipe.findOne({ RecipeID: req.params.RecipeID });
-    if (!recipe) return res.status(404).json({ message: "Recipe not found" });
-    
-    
-    res.status(200).json(recipe);
+    const newMealPlan = new MealPlanning({
+      UserName,
+      dayspreferred,
+      mealspreferred,
+      calorie,
+      timepreferred,
+      suggestions,
+    });
+    await newMealPlan.save();
+    res.status(201).json(newMealPlan);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ message: 'Error creating meal plan', error });
   }
-}
+};
 
-// Update Recipe
-export async function updateRecipe(req, res) {
+// Update a meal plan by ID
+export const updateMealPlan = async (req, res) => {
+  const { id } = req.params;
+  const { UserName, dayspreferred, mealspreferred, calorie, timepreferred, suggestions } = req.body;
   try {
-    const { RecipeID } = req.params; // Extract RecipeID from the request parameters
-
-    // Ensure that you're querying by customId, not _id
-    const updatedRecipe = await Recipe.findOneAndUpdate(
-      { customId: RecipeID }, // Use customId for lookup
-      req.body, 
+    const updatedMealPlan = await MealPlanning.findByIdAndUpdate(
+      id,
+      { UserName, dayspreferred, mealspreferred, calorie, timepreferred, suggestions },
       { new: true }
     );
-
-    if (!updatedRecipe) return res.status(404).json({ message: "Recipe not found" });
-    res.status(200).json(updatedRecipe);
+    if (!updatedMealPlan) {
+      return res.status(404).json({ message: 'Meal plan not found' });
+    }
+    res.status(200).json(updatedMealPlan);
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    res.status(500).json({ message: 'Error updating meal plan', error });
   }
-}
+};
 
-
-
-
-// Delete Recipe
-export async function deleteRecipe(req, res) {
+// Delete a meal plan by ID
+export const deleteMealPlan = async (req, res) => {
+  const { id } = req.params;
   try {
-    // Use custom ID if it's not ObjectId
-    const deletedRecipe = await Recipe.findOneAndDelete({ customId: req.params.RecipeID });
-
-
-    if (!deletedRecipe) return res.status(404).json({ message: "Recipe not found" });
-    res.status(200).json({ message: "Recipe deleted" });
+    const deletedMealPlan = await MealPlanning.findByIdAndDelete(id);
+    if (!deletedMealPlan) {
+      return res.status(404).json({ message: 'Meal plan not found' });
+    }
+    res.status(200).json({ message: 'Meal plan deleted successfully' });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ message: 'Error deleting meal plan', error });
   }
-
-}
+};

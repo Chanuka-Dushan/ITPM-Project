@@ -5,8 +5,9 @@ import cors from "cors";
 import dotenv from "dotenv";
 import fetch from "node-fetch";
 import multer from "multer";
-import MealPlanningDate from "./routes/MealPlanning/MealPlanningDate.js"
-import MealPlanningDetails from "./routes/MealPlanning/MealPlanningDetails.js";
+import mealPlanningRoute from "./routes/MealPlanning/MealPlanningDetails.js";
+// import mealPlanDate from "./routes/MealPlanning/MealPlanningDate.js";
+
 
 dotenv.config();
 
@@ -17,7 +18,7 @@ const MONGO_URI = process.env.MONGO_URI;
 // Middleware
 app.use(cors());
 app.use(express.json());
-
+app.use('/api/mealplans', mealPlanningRoute);
 // Multer setup for audio uploads (not used here but kept for compatibility)
 const upload = multer({ storage: multer.memoryStorage() });
 
@@ -121,8 +122,7 @@ mongoose
   .then(() => console.log("MongoDB Connected"))
   .catch((err) => console.log(err));
 
-  app.use("api/mealplanningdate",MealPlanningDate)
-  app.use("api/mealplanningdetails",MealPlanningDetails)
+  
 
 // Sample Route
 app.get("/", (req, res) => {

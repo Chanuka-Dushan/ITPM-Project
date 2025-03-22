@@ -1,18 +1,32 @@
-// const mongoose = require("mongoose");
-import { Schema, model } from "mongoose";
-import mongoose from "mongoose";
+// Models/MealPlanning/MealPlanningDetails.js
+import mongoose from 'mongoose';
 
-const MealPlanningDetails = new mongoose.Schema({
-
-  //_id: { type: String, required: true }, 
-  RecipeID: { type: String, required: true },
-  RecipeName: { type: String, required: true },
-  category: { type: String, required: true },
-  time: { type: String, required: true },
-  ingredients: { type: [String], required: true, validate: (val) => val.length >= 3 },
-  instructions: { type: String, required: true },
-  image: { type: String },
-  
+const MealPlanningSchema = new mongoose.Schema({
+  UserName: {
+    type: String,
+    required: true,
+  },
+  dayspreferred: {
+    type: String,
+    required: true,
+  },
+  mealspreferred: {
+    type: String,
+    required: true,
+  },
+  calorie: {
+    type: Number,
+    required: true,
+  },
+  timepreferred: {
+    type: String,
+    required: true,
+  },
+  suggestions: {
+    type: String,
+    required: true,
+  },
 });
 
-export default mongoose.model("RDetails", MealPlanningDetails);
+const MealPlanning = mongoose.model('MealPlanning', MealPlanningSchema);
+export default MealPlanning;
