@@ -70,7 +70,7 @@ const SideBar = () => {
                 <img
                   style={{ width: "30px", height: "30px", borderRadius: "8px" }}
                   src={logo}
-                  alt="Argon"
+                  alt="RECIPE HUB"
                 />
                 <Typography
                   variant="h4"
@@ -78,7 +78,7 @@ const SideBar = () => {
                   textTransform="capitalize"
                   color={colors.greenAccent[500]}
                 >
-                  Argon
+                 RECIPE HUB
                 </Typography>
               </Box>
             )}
