@@ -1,6 +1,9 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import ChatBot from "./chat-bot/bot";
+import MealPlanningDetails from "./pages/MealPlanningDetails"
+import MealPlanningDate from "./pages/MealPlanningDate"
+import MealPlanDetailsDisplay from "./pages/MealPlanDetailsDisplay"
 import TalkBot from "./talk-bot/talkbot";
 import App from "./App";
 import {
@@ -26,6 +29,7 @@ const AppRouter = () => {
           <Route path="/" element={<Dashboard />} />
           <Route path="/chatbot" element={<ChatBot/>} />
           <Route path="/talkbot" element={<TalkBot />} />
+          <Route path="/mealplanning/:mealPlanId" component={MealPlanningDetails} />
           <Route path="/team" element={<Team />} />
           <Route path="/contacts" element={<Contacts />} />
           <Route path="/invoices" element={<Invoices />} />
@@ -37,6 +41,9 @@ const AppRouter = () => {
           <Route path="/line" element={<Line />} />
           <Route path="/faq" element={<FAQ />} />
           <Route path="/geography" element={<Geography />} />
+          <Route path="/mealplanningdetails" element={<MealPlanningDetails />} />
+          <Route path="/mealplanningdate" element={<MealPlanningDate />} />
+          <Route path="/mealplandetailsdisplay" element={<MealPlanDetailsDisplay />} />
         </Route>
       </Routes>
     </Router>
