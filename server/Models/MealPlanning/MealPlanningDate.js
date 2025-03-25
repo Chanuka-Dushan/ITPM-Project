@@ -1,28 +1,25 @@
-// mealPlan.model.js
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-const mealScheduleSchema = new mongoose.Schema({
-  breakfast: { type: String, default: '' },
-  lunch: { type: String, default: '' },
-  dinner: { type: String, default: '' }
-});
+const mealSchema = new mongoose.Schema({
+    UserName: { type: String, required: true },
+    dayspreferred: { type: String, required: true },
+    calorie: { type: Number, required: true, min: 0 },
+    breakfast: { type: String },
+    lunch: { type: String },
+    dinner: { type: String },
+    suggestions: { type: String },
+    mealSchedule: {
+        type: Map,
+        of: {
+            breakfast: String,
+            lunch: String,
+            dinner: String,
+        },
+    },
+    recipes: [{
+        name: String,
+        dietary: [String]
+    }]
+}, { timestamps: true });
 
-const mealPlanSchema = new mongoose.Schema({
-  userName: { type: String, required: true },
-  breakfastTime: { type: String },
-  lunchTime: { type: String },
-  dinnerTime: { type: String },
-  calorieGoal: { type: Number },
-  mealSchedule: {
-    Monday: mealScheduleSchema,
-    Tuesday: mealScheduleSchema,
-    Wednesday: mealScheduleSchema,
-    Thursday: mealScheduleSchema,
-    Friday: mealScheduleSchema,
-    Saturday: mealScheduleSchema,
-    Sunday: mealScheduleSchema
-  },
-  createdAt: { type: Date, default: Date.now }
-});
-
-module.exports = mongoose.model('MealPlan', mealPlanSchema);
+module.exports = mongoose.model("Meal", mealSchema);
