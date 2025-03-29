@@ -1,7 +1,7 @@
-// mealPlan.routes.js
 import express from 'express';
+import mealPlanController from '../../Controllers/MealPlanning/MealPlanningDate.js';
+
 const router = express.Router();
-import mealPlanController from '../../Controllers/MealPlanning/MealPlanningDate';
 
 // Routes
 router.post('/create', mealPlanController.createMealPlan);
