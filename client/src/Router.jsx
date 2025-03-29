@@ -21,6 +21,8 @@ import {
   Stream,
 } from "./scenes";
 import RecipeHome from "./pages/home.jsx";
+import PopularPage from "./pages/popular.jsx";
+import AboutPage from "./pages/aboutus.jsx";
 
 const AppRouter = () => {
   return (
@@ -28,6 +30,8 @@ const AppRouter = () => {
       <Routes>
         {/* Standalone RecipeHome route */}
         <Route path="/" element={<RecipeHome />} />
+        <Route path="/popular" element={<PopularPage/>} />
+        <Route path="/about" element={<AboutPage/>}/>
 
         {/* App route with nested dashboard routes */}
         <Route path="/app" element={<App />}>

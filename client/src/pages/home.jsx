@@ -146,7 +146,7 @@ function RecipeHome() {
           <div className="hidden md:flex md:flex-1 md:items-center md:justify-center">
             <nav className="flex items-center space-x-6 text-sm font-medium">
               <Link to="/" className="font-bold transition-colors hover:text-blue-500">Home</Link>
-              <Link to="/categories" className="transition-colors hover:text-blue-500">Categories</Link>
+              <Link to="/app" className="transition-colors hover:text-blue-500">Categories</Link>
               <Link to="/popular" className="transition-colors hover:text-blue-500">Popular</Link>
               <Link to="/new" className="transition-colors hover:text-blue-500">New Recipes</Link>
               <Link to="/about" className="transition-colors hover:text-blue-500">About</Link>
