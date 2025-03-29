@@ -4,6 +4,7 @@ import ChatBot from "./chat-bot/bot";
 import MealPlanningDetails from "./pages/MealPlanningDetails"
 import MealPlanningDate from "./pages/MealPlanningDate"
 import MealPlanDetailsDisplay from "./pages/MealPlanDetailsDisplay"
+import MealPlanningHome from "./pages/MealPlanningHome"
 import TalkBot from "./talk-bot/talkbot";
 import App from "./App";
 import {
@@ -44,6 +45,7 @@ const AppRouter = () => {
           <Route path="/mealplanningdetails" element={<MealPlanningDetails />} />
           <Route path="/mealplanningdate" element={<MealPlanningDate />} />
           <Route path="/mealplandetailsdisplay" element={<MealPlanDetailsDisplay />} />
+          <Route path="/mealplanninghome" element={<MealPlanningHome />} />
         </Route>
       </Routes>
     </Router>

@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const mealSchema = new mongoose.Schema({
     UserName: { type: String, required: true },
@@ -22,4 +22,4 @@ const mealSchema = new mongoose.Schema({
     }]
 }, { timestamps: true });
 
-module.exports = mongoose.model("Meal", mealSchema);
+export default mongoose.model("Meal", mealSchema);
