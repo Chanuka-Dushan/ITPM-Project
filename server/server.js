@@ -176,6 +176,65 @@ app.post("/chat", async (req, res) => {
   }
 });
 
+
+app.post("/chatwithbot", async (req, res) => {
+  const { message, context } = req.body;
+
+  console.log("Received /chat withbot request, message:", message, "context:", context);
+
+  try {
+    if (!message) {
+      return res.status(400).json({ error: "No message provided" });
+    }
+
+    // Construct the prompt with context to guide the AI's response
+    const fullPrompt = context
+      ? `${context}\n\nUser question: ${message}`
+      : message;
+
+    const response = await fetch(API_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        contents: [
+          {
+            parts: [
+              {
+                text: fullPrompt,
+              },
+            ],
+          },
+        ],
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch response from Gemini API");
+    }
+
+    const data = await response.json();
+    console.log("Gemini API Response:", data);
+
+    if (
+      data.candidates &&
+      data.candidates.length > 0 &&
+      data.candidates[0].content &&
+      data.candidates[0].content.parts &&
+      data.candidates[0].content.parts[0].text
+    ) {
+      const botMessage = data.candidates[0].content.parts[0].text;
+      res.json({ message: botMessage });
+    } else {
+      throw new Error("No text found in candidates content parts");
+    }
+  } catch (error) {
+    console.error("Error in /chat:", error);
+    res.status(500).json({ error: "Failed to get response from Gemini API" });
+  }
+});
+
 // Database Connection
 mongoose
   .connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
