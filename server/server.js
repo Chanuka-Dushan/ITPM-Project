@@ -4,7 +4,13 @@ import cors from "cors";
 import dotenv from "dotenv";
 import fetch from "node-fetch"; 
 
+
 dotenv.config();
+
+//import routes
+// User management 
+import userRoutes from "./routes/UserAndProfileManagement/User.js"; // ✅ Import routes correctly (ESM format)
+
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -86,6 +92,10 @@ mongoose
 app.get("/", (req, res) => {
   res.send("Server is running...,I will config mongodb later");
 });
+
+//routs
+//User management
+app.use('/api/user', userRoutes);
 
 // Start the server
 app.listen(PORT, () => {
