@@ -6,6 +6,7 @@ import dotenv from "dotenv";
 import fetch from "node-fetch";
 import multer from "multer";
 import mealPlanningRoute from "./routes/MealPlanning/MealPlanningDetails.js";
+import MealPlanningDate from "./routes/MealPlanning/MealPlanningDate.js";
 // import mealPlanDate from "./routes/MealPlanning/MealPlanningDate.js";
 
 
@@ -19,6 +20,7 @@ const MONGO_URI = process.env.MONGO_URI;
 app.use(cors());
 app.use(express.json());
 app.use('/api/mealplans', mealPlanningRoute);
+app.use('/api/meals',MealPlanningDate)
 // Multer setup for audio uploads (not used here but kept for compatibility)
 const upload = multer({ storage: multer.memoryStorage() });
 

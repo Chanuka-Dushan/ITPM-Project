@@ -1,10 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 const MealPlanningDate = () => {
-  // Days of the week for scheduling
   const daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
   
-  // Sample recipes with dietary tags
   const defaultRecipes = [
     { name: "Avocado Toast", dietary: ["vegetarian", "vegan"] },
     { name: "Greek Yogurt with Berries", dietary: ["vegetarian", "low-carb"] },
@@ -16,7 +14,6 @@ const MealPlanningDate = () => {
     { name: "Quinoa Bowl", dietary: ["vegetarian", "high-protein"] }
   ];
 
-  // Dietary preference options
   const dietaryOptions = ["vegetarian", "vegan", "gluten-free", "high-protein", "low-carb"];
 
   const [formData, setFormData] = useState({
@@ -29,26 +26,17 @@ const MealPlanningDate = () => {
     suggestions: "",
   });
 
-  // Time validation error messages
   const [timeErrors, setTimeErrors] = useState({
     breakfast: "",
     lunch: "",
     dinner: ""
   });
 
-  // State for recipes
   const [recipes, setRecipes] = useState(defaultRecipes);
-  
-  // State for custom recipe form
   const [newRecipe, setNewRecipe] = useState({ name: "", dietary: [] });
-  
-  // State for recipe filters
   const [dietaryFilters, setDietaryFilters] = useState([]);
-  
-  // State for showing/hiding custom recipe form
   const [showRecipeForm, setShowRecipeForm] = useState(false);
-
-  // State for meal schedule
+  
   const [mealSchedule, setMealSchedule] = useState(
     daysOfWeek.reduce((acc, day) => {
       acc[day] = { breakfast: "", lunch: "", dinner: "" };
@@ -56,16 +44,56 @@ const MealPlanningDate = () => {
     }, {})
   );
 
-  // Current day being edited
   const [currentDay, setCurrentDay] = useState(daysOfWeek[0]);
-  
-  // Current meal being edited
   const [currentMeal, setCurrentMeal] = useState("breakfast");
-  
-  // Whether to show the meal scheduling modal
   const [showScheduler, setShowScheduler] = useState(false);
 
-  // Convert 24-hour time to 12-hour format with AM/PM
+  // Fetch existing meal data on component mount
+  useEffect(() => {
+    const fetchMealData = async () => {
+      try {
+        const response = await fetch("http://localhost:5000/api/meals");
+        if (!response.ok) {
+          throw new Error("Failed to fetch meal data");
+        }
+        const data = await response.json();
+        
+        // If data exists, update the states with fetched values
+        if (data && data.length > 0) {
+          const latestData = data[data.length - 1]; // Get the most recent entry
+          
+          setFormData(prev => ({
+            ...prev,
+            UserName: latestData.UserName || "",
+            dayspreferred: latestData.dayspreferred || "",
+            calorie: latestData.calorie || "",
+            breakfast: latestData.breakfast || "",
+            lunch: latestData.lunch || "",
+            dinner: latestData.dinner || "",
+            suggestions: latestData.suggestions || ""
+          }));
+
+          // Update meal schedule if it exists in the data
+          if (latestData.mealSchedule) {
+            setMealSchedule(prev => ({
+              ...prev,
+              ...latestData.mealSchedule
+            }));
+          }
+
+          // Update recipes if additional ones exist in the data
+          if (latestData.recipes && latestData.recipes.length > 0) {
+            setRecipes(prev => [...defaultRecipes, ...latestData.recipes]);
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching meal data:", error);
+      }
+    };
+
+    fetchMealData();
+  }, []); // Empty dependency array means this runs once on mount
+
   const convertTo12Hour = (time24) => {
     if (!time24) return "";
     const [hours, minutes] = time24.split(":");
@@ -75,7 +103,6 @@ const MealPlanningDate = () => {
     return `${hour12}:${minutes} ${meridiem}`;
   };
 
-  // Extract hours from time input for validation
   const getHoursFromTime = (timeString) => {
     if (!timeString) return null;
     const [hours] = timeString.split(":");
@@ -100,12 +127,10 @@ const MealPlanningDate = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
 
-    // Validate calorie field to prevent negative numbers
     if (name === "calorie" && value < 0) {
-      return; // Prevent setting negative calorie values
+      return;
     }
 
-    // Validate time fields
     if (["breakfast", "lunch", "dinner"].includes(name)) {
       const error = validateTime(name, value);
       setTimeErrors(prev => ({
@@ -176,17 +201,17 @@ const MealPlanningDate = () => {
 
   const addNewRecipe = () => {
     if (newRecipe.name.trim() === "") {
-      return; // Don't add empty recipes
+      return;
     }
     
     setRecipes([...recipes, newRecipe]);
-    setNewRecipe({ name: "", dietary: [] }); // Reset form
-    setShowRecipeForm(false); // Hide form after adding
+    setNewRecipe({ name: "", dietary: [] });
+    setShowRecipeForm(false);
   };
 
   const getFilteredRecipes = () => {
     if (dietaryFilters.length === 0) {
-      return recipes; // Return all recipes if no filters active
+      return recipes;
     }
     
     return recipes.filter(recipe => 
@@ -194,10 +219,9 @@ const MealPlanningDate = () => {
     );
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     
-    // Check for time validation errors
     const hasTimeErrors = Object.values(timeErrors).some(error => error !== "");
     
     if (hasTimeErrors) {
@@ -205,16 +229,53 @@ const MealPlanningDate = () => {
       return;
     }
     
-    // Include meal schedule in the form submission
     const formSubmission = {
       ...formData,
-      mealSchedule
+      mealSchedule,
+      recipes // Include recipes in the submission
     };
-    console.log("Form Data:", formSubmission);
-    alert("Form submitted successfully!");
+
+    try {
+      const response = await fetch("http://localhost:5000/api/meals", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formSubmission),
+      });
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      const data = await response.json();
+      console.log("Form submitted successfully:", data);
+      alert("Form submitted successfully!");
+      
+      setFormData({
+        UserName: "",
+        dayspreferred: "",
+        calorie: "",
+        breakfast: "",
+        lunch: "",
+        dinner: "",
+        suggestions: "",
+      });
+      
+      setMealSchedule(
+        daysOfWeek.reduce((acc, day) => {
+          acc[day] = { breakfast: "", lunch: "", dinner: "" };
+          return acc;
+        }, {})
+      );
+
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      alert("There was an error submitting the form. Please try again.");
+    }
   };
 
-  // Styles
+  // Styles remain unchanged
   const formStyle = {
     maxWidth: "600px",
     margin: "2rem auto",
@@ -337,7 +398,7 @@ const MealPlanningDate = () => {
     margin: "0.3rem",
     cursor: "pointer",
     fontSize: "0.8rem",
-    color: "#1a1a1a", // Darker text color for recipes
+    color: "#1a1a1a",
     fontWeight: "500",
   };
 
@@ -345,7 +406,7 @@ const MealPlanningDate = () => {
     ...recipeButtonStyle,
     backgroundColor: "#d6eaf8",
     borderColor: "#3498db",
-    color: "#1a1a1a", // Maintain dark text even when selected
+    color: "#1a1a1a",
   };
 
   const tagStyle = {
@@ -356,7 +417,7 @@ const MealPlanningDate = () => {
     padding: "2px 8px",
     margin: "2px",
     fontSize: "0.7rem",
-    color: "#1e6091", // Darker blue for better readability
+    color: "#1e6091",
     fontWeight: "500",
   };
 
@@ -383,29 +444,29 @@ const MealPlanningDate = () => {
     border: "1px solid #ddd",
     padding: "0.5rem",
     textAlign: "left",
-    color: "#333", // Slightly darker text for table cells
+    color: "#333",
   };
 
   const tableHeaderStyle = {
     ...tableCellStyle,
     backgroundColor: "#f2f2f2",
-    fontWeight: "700", // Bolder text for headers
-    color: "#000", // Black text for table headers
+    fontWeight: "700",
+    color: "#000",
   };
 
   const sectionHeaderStyle = {
-    fontSize: "1rem", 
+    fontSize: "1rem",
     marginBottom: "0.5rem",
-    color: "#1a1a1a", // Darker text for section headers
+    color: "#1a1a1a",
     fontWeight: "600",
   };
 
   const dietaryTagStyle = {
-    fontSize: "0.6rem", 
-    padding: "1px 4px", 
-    backgroundColor: "#f0f0f0", 
+    fontSize: "0.6rem",
+    padding: "1px 4px",
+    backgroundColor: "#f0f0f0",
     borderRadius: "8px",
-    color: "#333", // Darker text for dietary tags
+    color: "#333",
     fontWeight: "500",
   };
 
@@ -434,7 +495,6 @@ const MealPlanningDate = () => {
           />
         </div>
 
-        {/* Meal Time Preferences Section */}
         <div style={fieldStyle}>
           <label style={labelStyle}>Meal Time Preferences</label>
           <div style={flexContainer}>
@@ -479,7 +539,6 @@ const MealPlanningDate = () => {
           </div>
         </div>
 
-        {/* Meal Scheduling Section */}
         <div style={fieldStyle}>
           <label style={labelStyle}>Meal Scheduling</label>
           <button 
@@ -490,7 +549,6 @@ const MealPlanningDate = () => {
             {showScheduler ? "Hide Meal Scheduler" : "Open Meal Scheduler"}
           </button>
           
-          {/* Meal Scheduler Modal */}
           <div style={scheduleModalStyle}>
             <div style={flexContainer}>
               <div>
@@ -511,7 +569,6 @@ const MealPlanningDate = () => {
               </div>
             </div>
             
-            {/* Recipe Management Section */}
             <div style={{ marginTop: "1.5rem" }}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                 <h3 style={sectionHeaderStyle}>Recipe Library</h3>
@@ -524,7 +581,6 @@ const MealPlanningDate = () => {
                 </button>
               </div>
               
-              {/* Custom Recipe Form */}
               {showRecipeForm && (
                 <div style={{ 
                   marginTop: "1rem", 
@@ -564,7 +620,6 @@ const MealPlanningDate = () => {
                 </div>
               )}
               
-              {/* Recipe Filters */}
               <div style={{ marginTop: "1rem" }}>
                 <label style={labelStyle}>Filter by Dietary Preferences:</label>
                 <div style={{ display: "flex", flexWrap: "wrap", gap: "0.3rem" }}>
@@ -585,7 +640,6 @@ const MealPlanningDate = () => {
                 )}
               </div>
               
-              {/* Recipe Selection */}
               <div style={{ marginTop: "1rem" }}>
                 <label style={labelStyle}>Select a Recipe:</label>
                 {filteredRecipes.length === 0 ? (
@@ -626,7 +680,6 @@ const MealPlanningDate = () => {
               </div>
             </div>
             
-            {/* Weekly Schedule Overview */}
             <div style={{ marginTop: "1.5rem" }}>
               <h3 style={sectionHeaderStyle}>Weekly Meal Schedule</h3>
               <table style={scheduleTableStyle}>
