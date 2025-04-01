@@ -1,0 +1,6 @@
+import { someFunction } from './someModule.js';
+// ...existing code...
+
+export function anotherFunction() {
+  // ...existing code...
+}
