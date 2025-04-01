@@ -6,8 +6,6 @@ import { Menu, MenuItem, Sidebar } from "react-pro-sidebar";
 import {
   BarChartOutlined,
   CalendarTodayOutlined,
-  SmartToy,
-  SupportAgent,
   ContactsOutlined,
   DashboardOutlined,
   DonutLargeOutlined,
@@ -70,7 +68,7 @@ const SideBar = () => {
                 <img
                   style={{ width: "30px", height: "30px", borderRadius: "8px" }}
                   src={logo}
-                  alt="RECIPE HUB"
+                  alt="Argon"
                 />
                 <Typography
                   variant="h4"
@@ -78,7 +76,7 @@ const SideBar = () => {
                   textTransform="capitalize"
                   color={colors.greenAccent[500]}
                 >
-                 RECIPE HUB
+                  Argon
                 </Typography>
               </Box>
             )}
@@ -223,14 +221,14 @@ const SideBar = () => {
             icon={<HelpOutlineOutlined />}
           />
         </Menu>
-        {/* <Typography
+        <Typography
           variant="h6"
           color={colors.gray[300]}
           sx={{ m: "15px 0 5px 20px" }}
         >
           {!collapsed ? "Charts" : " "}
-        </Typography> */}
-        {/* <Menu
+        </Typography>
+        <Menu
           menuItemStyles={{
             button: {
               ":hover": {
@@ -271,7 +269,7 @@ const SideBar = () => {
             colors={colors}
             icon={<WavesOutlined />}
           />
-        </Menu> */}
+        </Menu>
       </Box>
     </Sidebar>
   );
