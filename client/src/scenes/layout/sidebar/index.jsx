@@ -155,31 +155,31 @@ const SideBar = () => {
         >
           <Item
             title="Manage Team"
-            path="/app/team"
+            path="/team"
             colors={colors}
             icon={<PeopleAltOutlined />}
           />
           <Item
             title="Chat Bot"
-            path={"/app/chatbot"}
+            path={"./chatbot"}
             colors={colors}
             icon={<SmartToy />}
           />
           <Item
             title="Talk with Our Bot"
-            path={"/app/talkbot"}
+            path={"./talkbot"}
             colors={colors}
             icon={<SupportAgent />}
           />
           <Item
             title="Contacts Information"
-            path="/app/contacts"
+            path="/contacts"
             colors={colors}
             icon={<ContactsOutlined />}
           />
           <Item
             title="Invoices Balances"
-            path="/app/invoices"
+            path="/invoices"
             colors={colors}
             icon={<ReceiptOutlined />}
           />
@@ -204,19 +204,19 @@ const SideBar = () => {
         >
           <Item
             title="Profile Form"
-            path="/app/form"
+            path="/form"
             colors={colors}
             icon={<PersonOutlined />}
           />
           <Item
             title="Calendar"
-            path="/app/calendar"
+            path="/calendar"
             colors={colors}
             icon={<CalendarTodayOutlined />}
           />
           <Item
             title="FAQ Page"
-            path="/app/faq"
+            path="/faq"
             colors={colors}
             icon={<HelpOutlineOutlined />}
           />
