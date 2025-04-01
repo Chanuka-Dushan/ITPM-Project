@@ -3,6 +3,8 @@ import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
 import fetch from "node-fetch"; 
+import recipeRoutes from "./routes/RecipeManagement/recipeRoutes.js"
+
 
 dotenv.config();
 
@@ -76,11 +78,16 @@ app.post('/chat', async (req, res) => {
   }
 });
 
+
+
 // Database Connection
 mongoose
   .connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log("MongoDB Connected"))
   .catch((err) => console.log(err));
+
+app.use("/api/recipes", recipeRoutes);
+
 
 // Sample Route
 app.get("/", (req, res) => {
