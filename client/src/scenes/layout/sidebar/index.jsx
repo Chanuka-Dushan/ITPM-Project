@@ -6,6 +6,8 @@ import { Menu, MenuItem, Sidebar } from "react-pro-sidebar";
 import {
   BarChartOutlined,
   CalendarTodayOutlined,
+  SmartToy,
+  SupportAgent,
   ContactsOutlined,
   DashboardOutlined,
   DonutLargeOutlined,
@@ -68,7 +70,7 @@ const SideBar = () => {
                 <img
                   style={{ width: "30px", height: "30px", borderRadius: "8px" }}
                   src={logo}
-                  alt="Argon"
+                  alt="RECIPE HUB"
                 />
                 <Typography
                   variant="h4"
@@ -76,7 +78,7 @@ const SideBar = () => {
                   textTransform="capitalize"
                   color={colors.greenAccent[500]}
                 >
-                  Argon
+                 RECIPE HUB
                 </Typography>
               </Box>
             )}
@@ -155,25 +157,31 @@ const SideBar = () => {
         >
           <Item
             title="Manage Team"
-            path="/team"
+            path="/app/team"
             colors={colors}
             icon={<PeopleAltOutlined />}
           />
           <Item
             title="Chat Bot"
-            path={"./chatbot"}
+            path={"/app/chatbot"}
             colors={colors}
-            icon={<PeopleAltOutlined />}
+            icon={<SmartToy />}
+          />
+          <Item
+            title="Talk with Our Bot"
+            path={"/app/talkbot"}
+            colors={colors}
+            icon={<SupportAgent />}
           />
           <Item
             title="Contacts Information"
-            path="/contacts"
+            path="/app/contacts"
             colors={colors}
             icon={<ContactsOutlined />}
           />
           <Item
             title="Invoices Balances"
-            path="/invoices"
+            path="/app/invoices"
             colors={colors}
             icon={<ReceiptOutlined />}
           />
@@ -198,31 +206,31 @@ const SideBar = () => {
         >
           <Item
             title="Profile Form"
-            path="/form"
+            path="/app/form"
             colors={colors}
             icon={<PersonOutlined />}
           />
           <Item
             title="Calendar"
-            path="/calendar"
+            path="/app/calendar"
             colors={colors}
             icon={<CalendarTodayOutlined />}
           />
           <Item
             title="FAQ Page"
-            path="/faq"
+            path="/app/faq"
             colors={colors}
             icon={<HelpOutlineOutlined />}
           />
         </Menu>
-        <Typography
+        {/* <Typography
           variant="h6"
           color={colors.gray[300]}
           sx={{ m: "15px 0 5px 20px" }}
         >
           {!collapsed ? "Charts" : " "}
-        </Typography>
-        <Menu
+        </Typography> */}
+        {/* <Menu
           menuItemStyles={{
             button: {
               ":hover": {
@@ -263,7 +271,7 @@ const SideBar = () => {
             colors={colors}
             icon={<WavesOutlined />}
           />
-        </Menu>
+        </Menu> */}
       </Box>
     </Sidebar>
   );
