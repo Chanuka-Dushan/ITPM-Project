@@ -24,6 +24,11 @@ import {
 import RecipeHome from "./pages/home.jsx";
 import PopularPage from "./pages/popular.jsx";
 import AboutPage from "./pages/aboutus.jsx";
+import AddRecipe from './components/AddRecipe';
+import UpdateRecipe from './components/UpdateRecipe';
+import RecipeDetail from './components/RecipeDetail';
+import HomeRecipe from "./pages/HomeRecipe"; // Corrected import
+import ViewRecipePage from "./pages/ViewRecipesPage"; // Corrected import
 
 const AppRouter = () => {
   return (
@@ -35,7 +40,7 @@ const AppRouter = () => {
         <Route path="/about" element={<AboutPage/>}/>
 
         {/* App route with nested dashboard routes */}
-        <Route path="/app" element={<App />}>
+        <Route path="/app" element={<App />}/>
           <Route index element={<Dashboard />} /> {/* Default route under /app */}
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="chatbot" element={<ChatBot />} />
@@ -55,7 +60,11 @@ const AppRouter = () => {
           <Route path="mealplanningdate" element={<MealPlanningDate />} />
           <Route path="mealplandetailsdisplay" element={<MealPlanDetailsDisplay />} />
           <Route path="mealplanninghome" element={<MealPlanningHome />} />
-        </Route>
+          <Route path="*" element={<HomeRecipe />} />
+          <Route path="add-recipe" element={<AddRecipe />} />
+          <Route path="view-recipes" element={<ViewRecipePage />} />
+          <Route path="update-recipe/:id" element={<UpdateRecipe />} />
+          <Route path="recipe/:id" element={<RecipeDetail />} />
       </Routes>
     </Router>
   );

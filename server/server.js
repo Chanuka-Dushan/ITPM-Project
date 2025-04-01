@@ -8,6 +8,8 @@ import multer from "multer";
 import mealPlanningRoute from "./routes/MealPlanning/MealPlanningDetails.js";
 import MealPlanningDate from "./routes/MealPlanning/MealPlanningDate.js";
 // import mealPlanDate from "./routes/MealPlanning/MealPlanningDate.js";
+import fetch from "node-fetch"; 
+import recipeRoutes from "./routes/RecipeManagement/recipeRoutes.js"
 
 
 dotenv.config();
@@ -237,6 +239,8 @@ app.post("/chatwithbot", async (req, res) => {
   }
 });
 
+
+
 // Database Connection
 mongoose
   .connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
@@ -244,6 +248,8 @@ mongoose
   .catch((err) => console.log(err));
 
   
+app.use("/api/recipes", recipeRoutes);
+
 
 // Sample Route
 app.get("/", (req, res) => {
