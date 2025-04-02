@@ -24,31 +24,7 @@ const MealPlanningHome = () => {
           </p>
         </section>
         
-        <section className="grid grid-cols-1 md:grid-cols-3 gap-8 my-10">
-          <div className="bg-white rounded-lg p-8 shadow-md hover:translate-y-1 transition-transform">
-            <div className="text-4xl text-green-600 mb-5">📝</div>
-            <h3 className="text-xl font-bold mb-4 text-green-800">CRUD Operations</h3>
-            <p className="text-gray-600 leading-relaxed">
-              Easily add, edit, delete, and view your weekly meal plans with our intuitive interface.
-            </p>
-          </div>
-          
-          <div className="bg-white rounded-lg p-8 shadow-md hover:translate-y-1 transition-transform">
-            <div className="text-4xl text-green-600 mb-5">📅</div>
-            <h3 className="text-xl font-bold mb-4 text-green-800">Meal Scheduling</h3>
-            <p className="text-gray-600 leading-relaxed">
-              Assign your favorite recipes to specific days of the week for perfect planning.
-            </p>
-          </div>
-          
-          <div className="bg-white rounded-lg p-8 shadow-md hover:translate-y-1 transition-transform">
-            <div className="text-4xl text-green-600 mb-5">🤖</div>
-            <h3 className="text-xl font-bold mb-4 text-green-800">Auto Meal Planning</h3>
-            <p className="text-gray-600 leading-relaxed">
-              Let our smart algorithm generate meal plans based on your preferences without duplicating meals per day.
-            </p>
-          </div>
-        </section>
+       
         
         <section className="bg-green-50 rounded-lg p-10 my-10 flex flex-col items-center">
           <h2 className="text-3xl font-bold mb-5 text-green-800">Ready to simplify your meal planning?</h2>
