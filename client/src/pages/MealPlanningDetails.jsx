@@ -164,7 +164,7 @@ const MealPlanningDetails = ({ mealPlanId }) => {
 
   return (
     <div style={formStyle}>
-      <h1 style={titleStyle}>{isUpdate ? "Update Meal Plan" : "Recipe Details Form"}</h1>
+      <h1 style={titleStyle}>{isUpdate ? "Update Meal Plan" : "Meal Planning Details Form"}</h1>
       {successMessage && <div style={successStyle}>{successMessage}</div>}
       <form onSubmit={handleSubmit}>
         <div style={fieldStyle}>
