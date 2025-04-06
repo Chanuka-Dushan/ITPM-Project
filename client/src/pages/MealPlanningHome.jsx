@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, useNavigate } from 'react-router-dom';
 import MealPlanningDetails from './MealPlanningDetails'; // Import the MealPlanningDetails component
+import MealPlanningDate from './MealPlanningDate'; // Import the MealPlanningDate component
 
 // Placeholder components for navigation pages
 const MealPlanner = () => <div className="container mt-5"><h1>Meal Planner Page</h1></div>;
@@ -32,6 +33,31 @@ const MealPlanningCard = () => {
   );
 };
 
+// Meal Scheduling Card with navigation functionality
+const MealSchedulingCard = () => {
+  const navigate = useNavigate();
+  
+  const handleButtonClick = () => {
+    navigate('/app/MealPlanningDate');
+  };
+
+  return (
+    <div className="bg-white rounded-lg p-8 shadow-md hover:translate-y-1 transition-transform">
+      <div className="text-4xl text-green-600 mb-5">📅</div>
+      <h3 className="text-xl font-bold mb-4 text-green-800">Meal Scheduling</h3>
+      <p className="text-gray-600 leading-relaxed mb-6">
+        Assign your favorite recipes to specific days of the week for perfect planning.
+      </p>
+      <button 
+        className="bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-4 rounded-md transition-colors"
+        onClick={handleButtonClick}
+      >
+        Schedule Meals
+      </button>
+    </div>
+  );
+};
+
 // Main HomePage Component
 const MealPlanningHome = () => {
   return (
@@ -58,17 +84,7 @@ const MealPlanningHome = () => {
               Users can easily select a meal according to their preferences and they can add a meal according to their preferences and view them.</p>
           </div>
 
-          <div className="bg-white rounded-lg p-8 shadow-md hover:translate-y-1 transition-transform">
-      <div className="text-4xl text-green-600 mb-5">📅</div>
-      <h3 className="text-xl font-bold mb-4 text-green-800">Meal Scheduling</h3>
-      <p className="text-gray-600 leading-relaxed mb-6">
-      Assign your favorite recipes to specific days of the week for perfect planning.
-      </p>
-      <button 
-        className="bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-4 rounded-md transition-colors">
-        Schedule Meals
-      </button>
-    </div>
+          <MealSchedulingCard />
                     
          
           <MealPlanningCard />
@@ -81,9 +97,7 @@ const MealPlanningHome = () => {
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4">
-            <Link to="/meal-planner" className="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded-md transition-colors">
-              Create Meal Plan
-            </Link>
+            
             <Link to="/meal-reports" className="bg-white hover:bg-green-50 text-green-600 font-bold py-3 px-8 rounded-md border-2 border-green-600 transition-colors">
               View Meal Reports
             </Link>
@@ -109,6 +123,7 @@ const App = () => {
         <Route path="/meal-planner" element={<MealPlanner />} />
         <Route path="/meal-reports" element={<MealReports />} />
         <Route path="/meal-planning-details" element={<MealPlanningDetails />} />
+        <Route path="/meal-planning-date" element={<MealPlanningDate />} />
       </Routes>
     </Router>
   );
