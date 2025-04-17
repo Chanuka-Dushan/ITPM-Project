@@ -81,7 +81,7 @@ const MealPlanningHome = () => {
             <div className="text-4xl text-green-600 mb-5">📝</div>
             <h3 className="text-xl font-bold mb-4 text-green-800">Functions</h3>
             <p className="text-gray-600 leading-relaxed">
-              Users can easily select a meal according to their preferences and they can add a meal according to their preferences and view them.</p>
+              Users can easily select a meal according to their diatery preferences and they can add a meal according to their preferences and view them.</p>
           </div>
 
           <MealSchedulingCard />
