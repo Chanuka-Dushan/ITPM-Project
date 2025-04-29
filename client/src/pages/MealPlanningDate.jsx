@@ -18,12 +18,9 @@ const MealPlanningDate = () => {
 
   const [formData, setFormData] = useState({
     UserName: "",
-    dayspreferred: "",
-    calorie: "",
     breakfast: "",
     lunch: "",
     dinner: "",
-    suggestions: "",
   });
 
   const [timeErrors, setTimeErrors] = useState({
@@ -241,7 +238,7 @@ const MealPlanningDate = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formSubmission),
+        body: JSON.stringify(formSubmission), 
       });
 
       if (!response.ok) {
@@ -254,12 +251,10 @@ const MealPlanningDate = () => {
       
       setFormData({
         UserName: "",
-        dayspreferred: "",
-        calorie: "",
         breakfast: "",
         lunch: "",
         dinner: "",
-        suggestions: "",
+        
       });
       
       setMealSchedule(
