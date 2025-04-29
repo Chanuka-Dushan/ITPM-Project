@@ -10,7 +10,13 @@ import MealPlanningDate from "./routes/MealPlanning/MealPlanningDate.js";
 import recipeRoutes from "./routes/RecipeManagement/recipeRoutes.js"
 
 
+
 dotenv.config();
+
+//import routes
+// User management 
+import userRoutes from "./routes/UserAndProfileManagement/User.js"; // ✅ Import routes correctly (ESM format)
+
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -251,6 +257,10 @@ app.use("/api/recipes", recipeRoutes);
 app.get("/", (req, res) => {
   res.send("Server is running..., I will config MongoDB later");
 });
+
+//routs
+//User management
+app.use('/api/user', userRoutes);
 
 // Start the server
 app.listen(PORT, () => {
