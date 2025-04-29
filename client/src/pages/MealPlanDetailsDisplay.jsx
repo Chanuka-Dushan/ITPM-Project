@@ -40,7 +40,7 @@ const MealPlanDetailsDisplay = () => {
   };
 
   const handleEdit = (mealPlan) => {
-    navigate("/MealPlanningDetails", { state: { mealPlan } });
+    navigate("/app/MealPlanningDetails", { state: { mealPlan } });
   };
 
   return (
