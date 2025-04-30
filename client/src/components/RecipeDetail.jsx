@@ -10,12 +10,17 @@ const RecipeDetail = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Fetch recipe data when component mounts
   useEffect(() => {
     const fetchRecipe = async () => {
       try {
         const response = await axios.get(`/api/recipes/${id}`);
-        setRecipe(response.data);
+        // Ensure fallback structure to avoid undefined values
+        const data = response.data;
+        setRecipe({
+          ...data,
+          ingredients: Array.isArray(data.ingredients) ? data.ingredients : [],
+          instructions: typeof data.instructions === 'string' ? data.instructions : '',
+        });
         setLoading(false);
       } catch (err) {
         console.error('Error fetching recipe:', err);
@@ -27,7 +32,6 @@ const RecipeDetail = () => {
     fetchRecipe();
   }, [id]);
 
-  // Function to handle recipe deletion
   const handleDelete = async () => {
     if (window.confirm('Are you sure you want to delete this recipe?')) {
       try {
@@ -105,9 +109,9 @@ const RecipeDetail = () => {
           <div className="instructions-section">
             <h2>Instructions</h2>
             <div className="instructions-content">
-              {recipe.instructions.split('\n').map((paragraph, index) => (
+              {recipe.instructions.split('\n').map((paragraph, index) =>
                 paragraph.trim() ? <p key={index}>{paragraph}</p> : null
-              ))}
+              )}
             </div>
           </div>
         </div>
