@@ -1,17 +1,41 @@
-// const mongoose = require("mongoose");
 import { Schema, model } from "mongoose";
 
-const RecipeSchema = new Schema({
+const recipeSchema = new Schema({
+  recipeId: {
+    type: String,
+    required: true
+  },
 
-  //_id: { type: String, required: true }, 
-  RecipeID: { type: String, required: true },
-  RecipeName: { type: String, required: true },
-  category: { type: String, required: true },
-  time: { type: String, required: true },
-  ingredients: { type: [String], required: true, validate: (val) => val.length >= 3 },
-  instructions: { type: String, required: true },
-  image: { type: String },
-  
-});
+  recipeName: {
+    type: String,
+    required: true
+  },
+  category: {
+    type: String,
+    required: true
+  },
+  time: {
+    type: String,
+    required: true
+  },
+  ingredients: {
+    type: [String],
+    required: true,
+    validate: {
+      validator: function (arr) {
+        return arr.length >= 3;
+      },
+      message: 'At least 3 ingredients are required'
+    }
+  },
+  instructions: {
+    type: String,
+    required: true
+  },
+  image: {
+    type: String,
+    default: ""
+  },
+}, { timestamps: true });
 
-export default model("Recipe", RecipeSchema);
+export default model("Recipe", recipeSchema);

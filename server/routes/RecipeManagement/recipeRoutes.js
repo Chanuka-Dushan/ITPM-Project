@@ -1,11 +1,40 @@
 import { Router } from "express";
-const router = Router();
-import { addRecipe, getRecipes, getRecipeById, updateRecipe, deleteRecipe } from '../../controllers/RecipeManagement/recipeController.js';
+import multer from "multer";
+import { extname } from "path";
 
-router.post("/add", addRecipe);
-router.get("/get", getRecipes);
-router.get("/recipes/:id", getRecipeById);
-router.put("/:id", updateRecipe);
+import {
+  createRecipe,
+  getAllRecipes,
+  getRecipeById,
+  updateRecipe,
+  deleteRecipe
+} from "../../Controllers/RecipeManagement/recipeController.js";
+
+const router = Router();
+
+// Multer storage & filter
+const storage = multer.diskStorage({
+  destination: (_req, _file, cb) => cb(null, "uploads/"),
+  filename: (_req, file, cb) =>
+    cb(null, Date.now() + extname(file.originalname))
+});
+
+const fileFilter = (_req, file, cb) => {
+  const allowed = /jpeg|jpg|png|gif/;
+  const valid =
+    allowed.test(extname(file.originalname).toLowerCase()) &&
+    allowed.test(file.mimetype);
+  if (valid) cb(null, true);
+  else cb(new Error("Only image files are allowed!"), false);
+};
+
+const upload = multer({ storage, fileFilter });
+
+// Routes
+router.post("/add", upload.single("image"), createRecipe);
+router.get("/get", getAllRecipes);
+router.get("/:id", getRecipeById);
+router.put("/:id", upload.single("image"), updateRecipe);
 router.delete("/:id", deleteRecipe);
 
 export default router;

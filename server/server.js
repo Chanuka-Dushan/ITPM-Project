@@ -5,6 +5,8 @@ import cors from "cors";
 import dotenv from "dotenv";
 import fetch from "node-fetch";
 import multer from "multer";
+import path from "path";
+import { fileURLToPath } from 'url';
 import mealPlanningRoute from "./routes/MealPlanning/MealPlanningDetails.js";
 import MealPlanningDate from "./routes/MealPlanning/MealPlanningDate.js";
 import recipeRoutes from "./routes/RecipeManagement/recipeRoutes.js"
@@ -249,7 +251,11 @@ mongoose
   .then(() => console.log("MongoDB Connected"))
   .catch((err) => console.log(err));
 
+  const __filename = fileURLToPath(import.meta.url);
+  const __dirname = path.dirname(__filename);
   
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+    
 app.use("/api/recipes", recipeRoutes);
 
 
@@ -257,6 +263,8 @@ app.use("/api/recipes", recipeRoutes);
 app.get("/", (req, res) => {
   res.send("Server is running..., I will config MongoDB later");
 });
+
+
 
 //routs
 //User management
