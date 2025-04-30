@@ -20,7 +20,7 @@ const MONGO_URI = process.env.MONGO_URI;
 app.use(cors());
 app.use(express.json());
 app.use('/api/mealplans', mealPlanningRoute);
-app.use('/api/meals',MealPlanningDate)
+app.use('/api/meals',MealPlanniengDate)
 // Multer setup for audio uploads (not used here but kept for compatibility)
 const upload = multer({ storage: multer.memoryStorage() });
 
