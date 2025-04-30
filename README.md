@@ -4,9 +4,9 @@ Welcome to the **ITPM Project**! This project is built using **React** and **Vit
 
 ## 🚀 Features
 
-- **React + Vite**: A blazing-fast development environment with Hot Module Replacement (HMR).
-- **ESLint Integration**: Enforces code quality and consistency.
-- **Plugin Support**: Choose between Babel or SWC for Fast Refresh.
+- **AI+Chat Bot**: Intregarated a AI chat and Voice Bots
+- **Meal Planings**: Allow users to Plan their Meals
+- **Recipe management**: Allow users to Find Recipes
 
 ## 📦 Plugins
 
