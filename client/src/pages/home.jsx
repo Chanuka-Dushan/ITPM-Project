@@ -339,7 +339,11 @@ function RecipeHome() {
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
             </div>
-            <Button variant="default" size="sm" className="hidden sm:flex">Sign In</Button>
+            <Link to="/login">
+              <Button variant="default" size="sm" className="hidden sm:flex">
+                Sign In
+              </Button>
+            </Link>
             <Button variant="outline" size="sm" className="md:hidden">
               <Search className="h-4 w-4" />
               <span className="sr-only">Search</span>

@@ -6,7 +6,7 @@ import {
     updateUser,
     deleteUser,
     loginUser,  // Import loginUser controller
-} from "../../Controllers/UserAndProfileManagement/user.js";
+} from "../../Controllers/UserAndProfileManagement/User.js";
 import { protect } from "../../Middleware/authMiddleware.js";  // Import the middleware
 
 const router = express.Router();
