@@ -24,10 +24,11 @@ import {
 import RecipeHome from "./pages/home.jsx";
 import PopularPage from "./pages/popular.jsx";
 import AboutPage from "./pages/aboutus.jsx";
-import HomeRecipe from "./pages/HomeRecipe.jsx";
-import AddRecipePage from "./pages/AddRecipePage.jsx";
-import ViewRecipe from "./pages/ViewRecipesPage.jsx";
-import UpdateRecipePage from "./pages/UpdateRecipePage.jsx";
+
+import RecipesPage from "./components/RecipesPage";
+import AddRecipeForm from "./components/AddRecipeForm";
+import UpdateRecipeForm from "./components/UpdateRecipeForm";
+import RecipeDetail from "./components/RecipeDetail";
 
 const AppRouter = () => {
   return (
@@ -59,11 +60,15 @@ const AppRouter = () => {
           <Route path="mealplanningdate" element={<MealPlanningDate />} />
           <Route path="mealplandetailsdisplay" element={<MealPlanDetailsDisplay />} />
           <Route path="mealplanninghome" element={<MealPlanningHome />} />
-          <Route path="homeRecipe" element={<HomeRecipe  />} />
-          <Route path="viewrecipe" element={<ViewRecipe />} />
-          <Route path="add-recipe" element={<AddRecipePage />} />
-          <Route path="update-recipe/:id" element={<UpdateRecipePage />} />
-          {/* <Route path="recipe/:id" element={<RecipeDeta />} /> */}
+
+          <Route path="recipes" element={<RecipesPage />} />        
+          <Route path="recipes/:id" element={<RecipeDetail />} />
+          <Route path="add-recipe" element={<AddRecipeForm />} />
+          <Route path="update-recipe/:id" element={<UpdateRecipeForm />} />
+
+
+
+ 
          
         </Route>
       </Routes>

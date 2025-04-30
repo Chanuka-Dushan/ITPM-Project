@@ -1,0 +1,131 @@
+.recipes-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  .recipes-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+  }
+  
+  .recipes-header h1 {
+    font-size: 32px;
+    color: #333;
+  }
+  
+  .add-recipe-btn {
+    background-color: #ff6b6b;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+  }
+  
+  .add-recipe-btn:hover {
+    background-color: #e64c4c;
+  }
+  
+  .recipes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 30px;
+  }
+  
+  .recipe-card {
+    background-color: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .recipe-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  }
+  
+  .recipe-image {
+    height: 200px;
+    background-size: cover;
+    background-position: center;
+    cursor: pointer;
+  }
+  
+  .recipe-info {
+    padding: 15px;
+  }
+  
+  .recipe-name {
+    font-size: 18px;
+    margin: 0 0 10px 0;
+    cursor: pointer;
+    color: #333;
+  }
+  
+  .recipe-name:hover {
+    color: #ff6b6b;
+  }
+  
+  .recipe-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+  }
+  
+  .edit-btn, .delete-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 5px;
+    border-radius: 4px;
+    transition: background-color 0.2s ease;
+  }
+  
+  .edit-btn {
+    color: #4a90e2;
+  }
+  
+  .edit-btn:hover {
+    background-color: rgba(74, 144, 226, 0.1);
+  }
+  
+  .delete-btn {
+    color: #e25555;
+  }
+  
+  .delete-btn:hover {
+    background-color: rgba(226, 85, 85, 0.1);
+  }
+  
+  .loading {
+    text-align: center;
+    padding: 40px;
+    font-size: 18px;
+    color: #666;
+  }
+  
+  .error-message {
+    text-align: center;
+    padding: 20px;
+    background-color: #ffeeee;
+    color: #e25555;
+    border-radius: 8px;
+    margin: 20px 0;
+  }
+  
+  .no-recipes {
+    text-align: center;
+    padding: 40px;
+    color: #666;
+    font-size: 18px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+  }
