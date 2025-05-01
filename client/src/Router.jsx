@@ -28,6 +28,12 @@ import HomeRecipe from "./pages/HomeRecipe.jsx";
 import AddRecipePage from "./pages/AddRecipePage.jsx";
 import ViewRecipe from "./pages/ViewRecipesPage.jsx";
 import UpdateRecipePage from "./pages/UpdateRecipePage.jsx";
+
+import SignUpPage from "./pages/SignUp.jsx";
+import LoginPage from "./pages/Login.jsx";
+import UserProfilePage from "./pages/UserProfile.jsx";
+
+
 import RecipeInfo from "./pages/RecipeInfo.jsx";
 
 const AppRouter = () => {
@@ -38,12 +44,17 @@ const AppRouter = () => {
         <Route path="/" element={<RecipeHome />} />
         <Route path="/popular" element={<PopularPage />} />
         <Route path="/about" element={<AboutPage />} />
+
+        <Route path="/signup" element={< SignUpPage/>}/>
+        <Route path="/login" element={< LoginPage/>}/>
+
         <Route path="/recipe-info/:id" element={<RecipeInfo />} />
 
         {/* App route with nested dashboard routes */}
         <Route path="/app/*" element={<App />}> {/* Added wildcard * here */}
           <Route index element={<Dashboard />} />
           <Route path="dashboard" element={<Dashboard />} />
+          <Route path="profile/:userId" element={<UserProfilePage/>} />
           <Route path="chatbot" element={<ChatBot />} />
           <Route path="talkbot" element={<TalkBot />} />
           <Route path="mealplanning/:mealPlanId" element={<MealPlanningDetails />} />

@@ -5,8 +5,13 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
+
+import { useNavigate } from "react-router-dom";
+
+import { UserContext, ToggledContext } from "../../../App"; // adjust path if needed
+
 import { tokens, ColorModeContext } from "../../../theme";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import {
   DarkModeOutlined,
   LightModeOutlined,
@@ -16,7 +21,9 @@ import {
   SearchOutlined,
   SettingsOutlined,
 } from "@mui/icons-material";
-import { ToggledContext } from "../../../App";
+
+import axios from "axios";
+
 const Navbar = () => {
   const theme = useTheme();
   const colorMode = useContext(ColorModeContext);
@@ -24,6 +31,37 @@ const Navbar = () => {
   const isMdDevices = useMediaQuery("(max-width:768px)");
   const isXsDevices = useMediaQuery("(max-width:466px)");
   const colors = tokens(theme.palette.mode);
+
+  const navigate = useNavigate();
+  const userId = useContext(UserContext);
+
+  const handleProfileClick = () => {
+    if (userId) {
+      navigate(`/app/profile/${userId}`);
+    } else {
+      console.error("User ID not found");
+    }
+  };
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    if (token) {
+      axios
+        .get("https://your-api-endpoint.com/data", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((response) => {
+          console.log("Fetched data:", response.data);
+        })
+        .catch((error) => {
+          console.error("Error fetching data:", error);
+        });
+    }
+  }, []);
+
   return (
     <Box
       display="flex"
@@ -66,7 +104,7 @@ const Navbar = () => {
         <IconButton>
           <SettingsOutlined />
         </IconButton>
-        <IconButton>
+        <IconButton onClick={handleProfileClick}>
           <PersonOutlined />
         </IconButton>
       </Box>

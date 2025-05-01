@@ -313,6 +313,60 @@ function RecipeHome() {
                 <span className="hidden font-bold sm:inline-block">RecipeHub</span>
               </Link>
             </div>
+
+            <Link to="/login">
+              <Button variant="default" size="sm" className="hidden sm:flex">
+                Sign In
+              </Button>
+            </Link>
+            <Button variant="outline" size="sm" className="md:hidden">
+              <Search className="h-4 w-4" />
+              <span className="sr-only">Search</span>
+            </Button>
+            <Button variant="outline" size="sm" className="md:hidden">
+              <span className="sr-only">Menu</span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="h-4 w-4"
+              >
+                <line x1="4" x2="20" y1="12" y2="12" />
+                <line x1="4" x2="20" y1="6" y2="6" />
+                <line x1="4" x2="20" y1="18" y2="18" />
+              </svg>
+            </Button>
+          </div>
+        </div>
+      </header>
+
+      <main className="flex-1">
+        {/* Hero Banner (unchanged) */}
+        <section className="relative">
+          <div className="relative h-[500px] w-full overflow-hidden">
+            <img
+              src="https://www.shutterstock.com/image-photo/unhealthy-products-food-bad-figure-260nw-1043372752.jpg"
+              alt="Delicious food"
+              className="object-cover w-full h-full"
+            />
+            <div className="absolute inset-0 bg-black/40" />
+            <div className="relative z-10 flex h-full flex-col items-center justify-center text-center text-white max-w-7xl mx-auto px-4">
+              <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl">Discover Delicious Recipes</h1>
+              <p className="mt-4 max-w-2xl text-lg sm:text-xl">
+                Find and save your favorite recipes from around the world
+              </p>
+              <div className="mt-8 flex gap-4">
+                <Button size="lg" className="rounded-full">Explore Recipes</Button>
+                <Button size="lg" variant="outline" className="rounded-full bg-white/10 text-white hover:bg-white/20">
+                  Create Account
+                </Button>
+
             <div className="hidden md:flex md:flex-1 md:items-center md:justify-center">
               <nav className="flex items-center space-x-6 text-sm font-medium">
                 <Link to="/" className="font-bold transition-colors hover:text-blue-500">Home</Link>
@@ -332,6 +386,7 @@ function RecipeHome() {
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                 />
+
               </div>
               <Button variant="default" size="sm" className="hidden sm:flex">Sign In</Button>
               <Button variant="outline" size="sm" className="md:hidden">
