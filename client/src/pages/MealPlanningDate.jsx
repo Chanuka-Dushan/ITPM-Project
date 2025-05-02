@@ -18,12 +18,9 @@ const MealPlanningDate = () => {
 
   const [formData, setFormData] = useState({
     UserName: "",
-    dayspreferred: "",
-    calorie: "",
     breakfast: "",
     lunch: "",
     dinner: "",
-    suggestions: "",
   });
 
   const [timeErrors, setTimeErrors] = useState({
@@ -231,17 +228,19 @@ const MealPlanningDate = () => {
     
     const formSubmission = {
       ...formData,
+      calorie: formData.calorie || 20,
+      dayspreferred: daysOfWeek.join(", "),
       mealSchedule,
       recipes // Include recipes in the submission
     };
 
     try {
-      const response = await fetch("http://localhost:5000/api/meals", {
+      const response = await fetch("http://localhost:5000/api/meals/create", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formSubmission),
+        body: JSON.stringify(formSubmission), 
       });
 
       if (!response.ok) {
@@ -254,12 +253,10 @@ const MealPlanningDate = () => {
       
       setFormData({
         UserName: "",
-        dayspreferred: "",
-        calorie: "",
         breakfast: "",
         lunch: "",
         dinner: "",
-        suggestions: "",
+        
       });
       
       setMealSchedule(
