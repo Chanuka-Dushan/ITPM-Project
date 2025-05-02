@@ -32,6 +32,7 @@
     "formic": "^0.0.10",
     "formik": "^2.4.6",
     "framer-motion": "^12.4.11",
+    "jwt-decode": "^4.0.0",
     "lucide-react": "^0.485.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
@@ -52,6 +53,6 @@
     "globals": "^15.15.0",
     "postcss": "^8.5.3",
     "tailwindcss": "^4.0.14",
-    "vite": "^6.2.0"
+    "vite": "^6.2.6"
   }
 }
