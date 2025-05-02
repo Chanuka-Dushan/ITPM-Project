@@ -83,10 +83,10 @@
     font-size: 16px;
   }
   
-  .recipe-category, .recipe-time {
+  .recipe-category, .recipe-time , .recipe-dietary-preferences {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 16px;
   }
   
   .recipe-image-container {

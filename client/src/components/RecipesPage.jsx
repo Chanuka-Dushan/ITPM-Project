@@ -74,9 +74,10 @@ const RecipesPage = () => {
                 onClick={() => navigate(`/app/recipes/${recipe._id}`)}
                 style={{
                   backgroundImage: recipe.image
-                    ? `url(${recipe.image})`
-                    : 'url(/default-recipe.jpg)',
+                    ? `url("http://localhost:5000/${recipe.image}")`
+                    : 'url("/default-recipe.jpg")',
                 }}
+                
               ></div>
 
               <div className="recipe-info">

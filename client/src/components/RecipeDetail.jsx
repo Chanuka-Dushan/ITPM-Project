@@ -3,6 +3,8 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import './RecipeDetail.css';
 
+
+
 const RecipeDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -13,7 +15,8 @@ const RecipeDetail = () => {
   useEffect(() => {
     const fetchRecipe = async () => {
       try {
-        const response = await axios.get(`/api/app/recipes/${id}`);
+        const response = await axios.get(`/api/recipes/${id}`);
+
         // Ensure fallback structure to avoid undefined values
         const data = response.data;
         setRecipe({
@@ -80,6 +83,9 @@ const RecipeDetail = () => {
             </span>
             <span className="recipe-time">
               <i className="fas fa-clock"></i> {recipe.time}
+            </span>
+            <span className="recipe-dietary-preference">
+              <i className="fas fa-leaf"></i> {recipe.dietaryPreference}
             </span>
           </div>
         </div>
