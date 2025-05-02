@@ -5,13 +5,10 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-
 import { useNavigate } from "react-router-dom";
-
-import { UserContext, ToggledContext } from "../../../App"; // adjust path if needed
-
+import { UserContext, ToggledContext } from "../../../App";
 import { tokens, ColorModeContext } from "../../../theme";
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import {
   DarkModeOutlined,
   LightModeOutlined,
@@ -21,8 +18,6 @@ import {
   SearchOutlined,
   SettingsOutlined,
 } from "@mui/icons-material";
-
-import axios from "axios";
 
 const Navbar = () => {
   const theme = useTheme();
@@ -42,25 +37,6 @@ const Navbar = () => {
       console.error("User ID not found");
     }
   };
-
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-
-    if (token) {
-      axios
-        .get("https://your-api-endpoint.com/data", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
-        .then((response) => {
-          console.log("Fetched data:", response.data);
-        })
-        .catch((error) => {
-          console.error("Error fetching data:", error);
-        });
-    }
-  }, []);
 
   return (
     <Box
