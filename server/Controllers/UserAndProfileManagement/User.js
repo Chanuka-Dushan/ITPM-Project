@@ -23,58 +23,75 @@ export const getUser = async (req, res) => {
     }
 };
 
-// Create a new user
 export const createUser = async (req, res) => {
     const { name, password, email } = req.body;
-
+    const profilePicture = req.file ? req.file.buffer : null;
+  
     try {
-        // Find the maximum userId in the collection
-        const maxUser = await User.findOne({}, {}, { sort: { 'userId': -1 } });
-        let newUserId = 'U001'; // Default if no users exist
-
-        if (maxUser) {
-            // Increment the maximum userId by 1
-            const nextId = parseInt(maxUser.userId.slice(1)) + 1;
-            newUserId = 'U' + nextId.toString().padStart(3, '0'); // Ensure 3-digit format
-        }
-
-        // Create a new user document with the retrieved data
-        const user = await User.create({
-            userId: newUserId, // Dynamically generated userId
-            name,
-            password,
-            email,
-        });
-
-        res.status(201).json(user);
+      // Find the maximum userId in the collection
+      const maxUser = await User.findOne({}, {}, { sort: { userId: -1 } });
+      let newUserId = 'U001'; // Default if no users exist
+  
+      if (maxUser) {
+        // Increment the maximum userId by 1
+        const nextId = parseInt(maxUser.userId.slice(1)) + 1;
+        newUserId = 'U' + nextId.toString().padStart(3, '0'); // Ensure 3-digit format
+      }
+  
+      // Create a new user document with the retrieved data
+      const user = await User.create({
+        userId: newUserId,
+        name,
+        password,
+        email,
+        profilePicture,
+      });
+  
+      res.status(201).json(user);
     } catch (error) {
-        res.status(400).json({ error: error.message });
+      res.status(400).json({ error: error.message });
     }
-};
+  };
+  
+  
 
-// Update a user by userId
-export const updateUser = async (req, res) => {
-    const { password } = req.body; // Extract password if provided
-
+  export const updateUser = async (req, res) => {
     try {
-        // If password is being updated, hash it first
-        if (password) {
-            req.body.password = await bcrypt.hash(password, 10);
+      const { password, name, email, role } = req.body;
+      const profilePicture = req.file?.buffer;
+  
+      const updateData = {};
+      if (name) updateData.name = name;
+      if (email) updateData.email = email;
+      if (role) updateData.role = role;
+      if (profilePicture) updateData.profilePicture = profilePicture;
+  
+      if (password) {
+        updateData.password = await bcrypt.hash(password, 10);
+      }
+  
+      const updatedUser = await User.findOneAndUpdate(
+        { userId: req.params.userId },
+        { $set: updateData },
+        {
+          new: true,
+          runValidators: true,
+          context: "query",
         }
-
-        // Update user
-        const updatedUser = await User.findOneAndUpdate(
-            { userId: req.params.userId },
-            req.body,
-            { new: true }
-        );
-        
-        if (!updatedUser) return res.status(404).json({ error: "User not found" });
-        res.status(200).json(updatedUser);
+      );
+  
+      if (!updatedUser) {
+        return res.status(404).json({ error: "User not found" });
+      }
+  
+      res.status(200).json(updatedUser);
     } catch (error) {
-        res.status(400).json({ error: error.message });
+      res.status(400).json({ error: error.message });
     }
-};
+  };
+  
+  
+  
 
 // Delete a user by userId
 export const deleteUser = async (req, res) => {
@@ -117,3 +134,26 @@ export const loginUser = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 };
+
+//get image by user id
+export const getUserProfilePicture = async (req, res) => {
+    try {
+      const user = await User.findOne({ userId: req.params.userId });
+  
+      if (!user) {
+        return res.status(404).json({ error: "User not found" });
+      }
+  
+      if (!user.profilePicture) {
+        // Return 200 with empty body if no profile picture is set
+        return res.status(200).send();
+      }
+  
+      res.set("Content-Type", "image/jpeg"); // Adjust the content type as needed
+      res.status(200).send(user.profilePicture);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  };
+  
+  

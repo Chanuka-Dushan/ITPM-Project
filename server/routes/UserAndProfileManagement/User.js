@@ -1,24 +1,26 @@
 import express from "express";
 import {
-    getAllUsers,
-    getUser,
-    createUser,
-    updateUser,
-    deleteUser,
-    loginUser,  // Import loginUser controller
+  getAllUsers,
+  getUser,
+  createUser,
+  updateUser,
+  deleteUser,
+  loginUser,
+  getUserProfilePicture,
 } from "../../Controllers/UserAndProfileManagement/User.js";
-import { protect } from "../../Middleware/authMiddleware.js";  // Import the middleware
+import { protect } from "../../Middleware/authMiddleware.js";
+import { upload } from "../../Middleware/upload.js";
 
 const router = express.Router();
 
-// Protect these routes with the 'protect' middleware
-router.get("/", protect, getAllUsers); // This route will require a valid token
-router.get("/:userId", protect, getUser); // This route will require a valid token
-router.post("/add", createUser); // This route doesn't need protection
-router.patch("/:userId", protect, updateUser); // This route will require a valid token
-router.delete("/:userId", protect, deleteUser); // This route will require a valid token
+router.get("/", protect, getAllUsers);
+router.get("/:userId", protect, getUser);
+router.post("/add", upload.single("profilePicture"), createUser); // <-- multer
+router.put("/:userId", protect, upload.single("profilePicture"), updateUser);
+router.delete("/:userId", protect, deleteUser);
+router.post("/login", loginUser);
 
-// Login route (POST request to login)
-router.post("/login", loginUser);  // New login route
+// New route to get profile picture
+router.get("/profilePicture/:userId", getUserProfilePicture);
 
 export default router;
