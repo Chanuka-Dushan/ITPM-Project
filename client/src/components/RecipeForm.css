@@ -7,7 +7,8 @@
   .recipe-form-container h1 {
     text-align: center;
     margin-bottom: 30px;
-    color: #333;
+    color: #bdbee3;
+    font-size: 26px;
   }
   
   .recipe-form {
@@ -25,7 +26,7 @@
     display: block;
     margin-bottom: 8px;
     font-weight: bold;
-    color: #555;
+    color: #393838;
   }
   
   .form-group input,
@@ -33,14 +34,16 @@
   .form-group textarea {
     width: 100%;
     padding: 10px;
-    border: 1px solid #ddd;
+    border: 1px solid #161616;
     border-radius: 4px;
     font-size: 16px;
+    color: #353535;
   }
   
   .form-group textarea {
     resize: vertical;
     min-height: 120px;
+    
   }
   
   .ingredient-row {
@@ -100,8 +103,8 @@
   }
   
   .cancel-btn {
-    background-color: #f0f0f0;
-    color: #666;
+    background-color: #dd5656;
+    color: #161515;
   }
   
   .cancel-btn:hover {
@@ -109,8 +112,8 @@
   }
   
   .submit-btn {
-    background-color: #ff6b6b;
-    color: white;
+    background-color: #4f72de;
+    color: rgb(24, 24, 24);
   }
   
   .submit-btn:hover {

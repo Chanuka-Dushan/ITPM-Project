@@ -17,7 +17,7 @@
   }
   
   .add-recipe-btn {
-    background-color: #ff6b6b;
+    background-color: #6b89ff;
     color: white;
     border: none;
     padding: 10px 20px;
@@ -70,7 +70,7 @@
   }
   
   .recipe-name:hover {
-    color: #ff6b6b;
+    color: #6b9cff;
   }
   
   .recipe-actions {
@@ -84,9 +84,13 @@
     border: none;
     cursor: pointer;
     font-size: 16px;
-    padding: 5px;
-    border-radius: 4px;
+    padding: 10px ;
+    border-radius: 20px;
     transition: background-color 0.2s ease;
+    display: inline-block;
+    min-width: 50px;
+    text-align: center;
+    z-index: auto;
   }
   
   .edit-btn {
@@ -94,7 +98,8 @@
   }
   
   .edit-btn:hover {
-    background-color: rgba(74, 144, 226, 0.1);
+    background-color: rgba(216, 221, 227, 0.1);
+    
   }
   
   .delete-btn {

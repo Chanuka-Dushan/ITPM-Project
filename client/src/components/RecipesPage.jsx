@@ -14,6 +14,8 @@ const RecipesPage = () => {
     const fetchRecipes = async () => {
       try {
         const response = await axios.get('/api/recipes/get');
+
+
         const data = response.data;
 
         // ✅ Ensure data is an array
@@ -56,7 +58,7 @@ const RecipesPage = () => {
     <div className="recipes-container">
       <div className="recipes-header">
         <h1>Our Recipes Collection</h1>
-        <Link to="/add-recipe" className="add-recipe-btn">Add Recipe</Link>
+        <Link to="/app/add-recipe" className="add-recipe-btn">Add Recipe</Link>
       </div>
 
       {recipes.length === 0 ? (
@@ -69,7 +71,7 @@ const RecipesPage = () => {
             <div key={recipe._id} className="recipe-card">
               <div
                 className="recipe-image"
-                onClick={() => navigate(`/recipe/${recipe._id}`)}
+                onClick={() => navigate(`/app/recipes/${recipe._id}`)}
                 style={{
                   backgroundImage: recipe.image
                     ? `url(${recipe.image})`
@@ -79,14 +81,14 @@ const RecipesPage = () => {
 
               <div className="recipe-info">
                 <h3
-                  onClick={() => navigate(`/recipe/${recipe._id}`)}
+                  onClick={() => navigate(`/app/recipes/${recipe._id}`)}
                   className="recipe-name"
                 >
                   {recipe.recipeName}
                 </h3>
                 <div className="recipe-actions">
                   <button
-                    onClick={() => navigate(`/update-recipe/${recipe._id}`)}
+                    onClick={() => navigate(`/app/update-recipe/${recipe._id}`)}
                     className="edit-btn"
                   >
                     <i className="fas fa-edit"></i>

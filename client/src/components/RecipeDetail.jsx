@@ -13,7 +13,7 @@ const RecipeDetail = () => {
   useEffect(() => {
     const fetchRecipe = async () => {
       try {
-        const response = await axios.get(`/api/recipes/${id}`);
+        const response = await axios.get(`/api/app/recipes/${id}`);
         // Ensure fallback structure to avoid undefined values
         const data = response.data;
         setRecipe({
@@ -35,14 +35,15 @@ const RecipeDetail = () => {
   const handleDelete = async () => {
     if (window.confirm('Are you sure you want to delete this recipe?')) {
       try {
-        await axios.delete(`/api/recipes/${id}`);
-        navigate('/recipes');
+        await axios.delete(`/api/app/recipes/${id}`);
+        navigate('/app/recipes'); // Fixed path
       } catch (err) {
         setError('Failed to delete recipe. Please try again.');
         console.error('Error deleting recipe:', err);
       }
     }
   };
+  
 
   if (loading) return <div className="loading">Loading recipe...</div>;
   if (error) return <div className="error-message">{error}</div>;
@@ -51,12 +52,12 @@ const RecipeDetail = () => {
   return (
     <div className="recipe-detail-container">
       <div className="recipe-detail-header">
-        <Link to="/recipes" className="back-link">
+        <Link to="/app/recipes" className="back-link">
           &larr; Back to Recipes
         </Link>
         <div className="recipe-actions">
           <button 
-            onClick={() => navigate(`/update-recipe/${recipe._id}`)} 
+            onClick={() => navigate(`/app/update-recipe/${recipe._id}`)} 
             className="edit-btn"
           >
             <i className="fas fa-edit"></i> Edit Recipe
@@ -83,15 +84,16 @@ const RecipeDetail = () => {
           </div>
         </div>
 
-        {recipe.image && (
-          <div className="recipe-image-container">
-            <img 
-              src={recipe.image} 
-              alt={recipe.recipeName} 
-              className="recipe-detail-image" 
-            />
-          </div>
-        )}
+        {(recipe.imageUrl || recipe.image) && (
+        <div className="recipe-image-container">
+         <img 
+          src={`http://localhost:5000${recipe.imageUrl || recipe.image}`} 
+          alt={recipe.recipeName} 
+          className="recipe-detail-image" 
+         />
+        </div>
+      )}
+
 
         <div className="recipe-sections">
           <div className="ingredients-section">

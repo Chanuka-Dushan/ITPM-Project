@@ -12,6 +12,7 @@ const UpdateRecipeForm = () => {
   const [formData, setFormData] = useState({
     recipeName: '',
     category: '',
+    dietaryPreference: '',
     time: '',
     ingredients: [{ name: '', quantity: '' }],
     instructions: '',
@@ -38,6 +39,7 @@ const UpdateRecipeForm = () => {
         setFormData({
           recipeName: recipe.recipeName || '',
           category: recipe.category || '',
+          dietaryPreference: recipe.dietaryPreference || '',
           time: recipe.time || '',
           ingredients: formattedIngredients.length > 0 ? formattedIngredients : [{ name: '', quantity: '' }],
           instructions: recipe.instructions || '',
@@ -120,7 +122,7 @@ const UpdateRecipeForm = () => {
     e.preventDefault();
     
     // Validate form data
-    if (!formData.recipeName || !formData.category || !formData.time || !formData.instructions) {
+    if (!formData.recipeName || !formData.category || !formData.dietaryPreference || !formData.time || !formData.instructions) {
       setError('Please fill out all required fields');
       return;
     }
@@ -147,6 +149,7 @@ const UpdateRecipeForm = () => {
       const data = new FormData();
       data.append('recipeName', formData.recipeName);
       data.append('category', formData.category);
+      data.append('dietaryPreference', formData.dietaryPreference);
       data.append('time', formData.time);
       data.append('instructions', formData.instructions);
       
@@ -219,6 +222,26 @@ const UpdateRecipeForm = () => {
             <option value="Drink">Drink</option>
             <option value="Other">Other</option>
           </select>
+        </div>
+
+        <div className="form-group">
+         <label htmlFor="dietaryPreference">Dietary Preference</label>
+         <select
+          id="dietaryPreference"
+          name="dietaryPreference"
+          value={formData.dietaryPreference}
+          onChange={handleChange}
+          required
+      >
+          <option value="">Select Preference</option>
+          <option value="Vegan">Vegan</option>
+          <option value="Vegetarian">Vegetarian</option>
+          <option value="Gluten-Free">Gluten-Free</option>
+          <option value="Keto">Keto</option>
+          <option value="Halal">Halal</option>
+          <option value="Kosher">Kosher</option>
+          <option value="None">None</option>
+         </select>
         </div>
 
         <div className="form-group">
