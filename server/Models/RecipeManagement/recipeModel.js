@@ -1,4 +1,12 @@
 import { Schema, model } from "mongoose";
+import mongoose from 'mongoose';
+
+
+
+const ingredientSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  quantity: { type: String, required: true }
+});
 
 const recipeSchema = new Schema({
   recipeId: {
@@ -14,20 +22,15 @@ const recipeSchema = new Schema({
     type: String,
     required: true
   },
+  dietaryPreference: {
+     type: String, 
+     default: 'None' },
   time: {
     type: String,
     required: true
   },
-  ingredients: {
-    type: [String],
-    required: true,
-    validate: {
-      validator: function (arr) {
-        return arr.length >= 3;
-      },
-      message: 'At least 3 ingredients are required'
-    }
-  },
+  ingredients: [ingredientSchema],
+
   instructions: {
     type: String,
     required: true

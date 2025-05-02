@@ -1,4 +1,5 @@
-import { Router } from "express";
+import express from "express";
+
 import multer from "multer";
 import { extname } from "path";
 
@@ -10,7 +11,8 @@ import {
   deleteRecipe
 } from "../../Controllers/RecipeManagement/recipeController.js";
 
-const router = Router();
+const router = express.Router();
+
 
 // Multer storage & filter
 const storage = multer.diskStorage({
