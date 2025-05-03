@@ -3,6 +3,7 @@ import express from "express";
 import multer from "multer";
 import { extname } from "path";
 
+
 import {
   createRecipe,
   getAllRecipes,
@@ -10,6 +11,9 @@ import {
   updateRecipe,
   deleteRecipe
 } from "../../Controllers/RecipeManagement/recipeController.js";
+import { generateRecipePdf } from "../../Controllers/RecipeManagement/recipeController.js";
+
+
 
 const router = express.Router();
 
@@ -38,5 +42,9 @@ router.get("/get", getAllRecipes);
 router.get("/:id", getRecipeById);
 router.put("/:id", upload.single("image"), updateRecipe);
 router.delete("/:id", deleteRecipe);
+
+// Add the PDF route
+router.get('/recipes/:id/report', generateRecipePdf);
+
 
 export default router;

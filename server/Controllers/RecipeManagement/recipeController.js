@@ -1,5 +1,10 @@
 import Recipe from "../../Models/RecipeManagement/recipeModel.js";
 import { v4 as uuidv4 } from "uuid";
+
+import PDFDocument from 'pdfkit';
+import fs from 'fs';
+import path from 'path';
+
 // Create a new recipe
 export async function createRecipe(req, res) {
   try {
@@ -111,6 +116,57 @@ export async function deleteRecipe(req, res) {
     const recipe = await Recipe.findByIdAndDelete(req.params.id);
     if (!recipe) return res.status(404).json({ message: "Recipe not found" });
     res.status(200).json({ message: "Recipe deleted successfully" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+}
+
+
+// Generate PDF report for a specific recipe
+export async function generateRecipePdf(req, res) {
+  const { id } = req.params;
+
+  try {
+    const recipe = await Recipe.findById(id);
+    if (!recipe) {
+      return res.status(404).json({ message: 'Recipe not found' });
+    }
+
+    // Create a new PDF document
+    const doc = new PDFDocument();
+    
+    // Set the response header for downloading the PDF
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', `attachment; filename="${recipe.recipeName}_report.pdf"`);
+
+    // Pipe the PDF to the response
+    doc.pipe(res);
+
+    // Add content to the PDF
+    doc.fontSize(18).text(`Recipe Report: ${recipe.recipeName}`, { align: 'center' });
+    doc.moveDown();
+
+    doc.fontSize(14).text(`Category: ${recipe.category}`);
+    doc.text(`Dietary Preference: ${recipe.dietaryPreference}`);
+    doc.text(`Time: ${recipe.time}`);
+    doc.moveDown();
+
+    doc.fontSize(12).text(`Ingredients:`);
+    recipe.ingredients.forEach((ingredient, index) => {
+      doc.text(`${index + 1}. ${ingredient.name} - ${ingredient.quantity}`);
+    });
+    doc.moveDown();
+
+    doc.text(`Instructions:`);
+    recipe.instructions.split('\n').forEach((instruction, index) => {
+      doc.text(`${index + 1}. ${instruction}`);
+    });
+    doc.moveDown();
+
+    doc.text(`Created On: ${new Date(recipe.createdAt).toLocaleDateString()}`, { underline: true });
+
+    // Finalize the PDF and send it to the client
+    doc.end();
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

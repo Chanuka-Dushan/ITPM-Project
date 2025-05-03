@@ -10,6 +10,7 @@ import { fileURLToPath } from 'url';
 import mealPlanningRoute from "./routes/MealPlanning/MealPlanningDetails.js";
 import MealPlanningDate from "./routes/MealPlanning/MealPlanningDate.js";
 import recipeRoutes from "./routes/RecipeManagement/recipeRoutes.js"
+import substitutionRoutes from './routes/RecipeManagement/recipeRoutes.js';
 
 
 
@@ -259,8 +260,10 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 
 
-    
+app.use('/api/substitutes', substitutionRoutes);    
 app.use("/api/recipes", recipeRoutes);
+
+
 
 
 // Sample Route
