@@ -1,32 +1,23 @@
-/* eslint-disable react/prop-types */
 import { Avatar, Box, IconButton, Typography, useTheme } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
 import { tokens } from "../../../theme";
 import { Menu, MenuItem, Sidebar } from "react-pro-sidebar";
 import {
-  BarChartOutlined,
-  CalendarTodayOutlined,
+  MenuOutlined,
+  PersonOutlined,
+  FavoriteBorderOutlined,
+  BookOutlined,
   SmartToy,
   SupportAgent,
-  ContactsOutlined,
-  DashboardOutlined,
-  DonutLargeOutlined,
-  HelpOutlineOutlined,
-  MapOutlined,
-  MenuOutlined,
-  PeopleAltOutlined,
-  PersonOutlined,
-  ReceiptOutlined,
-  TimelineOutlined,
-  WavesOutlined,
+  HomeOutlined,
+  SettingsOutlined,
 } from "@mui/icons-material";
-import avatar from "../../../assets/images/avatar.png";
 import logo from "../../../assets/images/logo.png";
-import Item from "./Item";
+import Item from "../sidebar/Item";
 import { ToggledContext, UserContext } from "../../../App";
 import axiosInstance from "../../../axiosInstance";
 
-const SideBar = () => {
+const SidebarUser = () => {
   const [collapsed, setCollapsed] = useState(false);
   const { toggled, setToggled } = useContext(ToggledContext);
   const userId = useContext(UserContext);
@@ -35,6 +26,7 @@ const SideBar = () => {
 
   const [userData, setUserData] = useState(null);
   const [profilePicUrl, setProfilePicUrl] = useState(null);
+  const [imageError, setImageError] = useState(false);
 
   useEffect(() => {
     if (userId) {
@@ -124,9 +116,16 @@ const SideBar = () => {
         >
           <Avatar
             alt="avatar"
-            src={profilePicUrl}
+            src={!imageError ? profilePicUrl : undefined}
+            onError={() => setImageError(true)}
             sx={{ width: "100px", height: "100px" }}
-          />
+          >
+            {imageError && (
+              <Typography variant="h6" color={colors.gray[100]}>
+                Add Image
+              </Typography>
+            )}
+          </Avatar>
           <Box sx={{ textAlign: "center" }}>
             <Typography variant="h3" fontWeight="bold" color={colors.gray[100]}>
               {userData?.name || "Loading..."}
@@ -136,7 +135,7 @@ const SideBar = () => {
               fontWeight="500"
               color={colors.greenAccent[500]}
             >
-              Admin
+              User
             </Typography>
           </Box>
         </Box>
@@ -155,96 +154,46 @@ const SideBar = () => {
           }}
         >
           <Item
-            title="Dashboard"
-            path="/"
+            title="Profile"
+            path="/app/profile"
             colors={colors}
-            icon={<DashboardOutlined />}
+            icon={<PersonOutlined />}
           />
-        </Menu>
-        <Typography
-          variant="h6"
-          color={colors.gray[300]}
-          sx={{ m: "15px 0 5px 20px" }}
-        >
-          {!collapsed ? "Data" : " "}
-        </Typography>
-        <Menu
-          menuItemStyles={{
-            button: {
-              ":hover": {
-                color: "#868dfb",
-                background: "transparent",
-                transition: ".4s ease",
-              },
-            },
-          }}
-        >
           <Item
-            title="Manage Team"
-            path="/app/team"
+            title="Recipes For You"
+            path="/app/recipes-for-you"
             colors={colors}
-            icon={<PeopleAltOutlined />}
+            icon={<FavoriteBorderOutlined />}
+          />
+          <Item
+            title="My Recipes"
+            path="/app/my-recipes"
+            colors={colors}
+            icon={<BookOutlined />}
           />
           <Item
             title="Chat Bot"
-            path={"/app/chatbot"}
+            path="/app/chatbot"
             colors={colors}
             icon={<SmartToy />}
           />
           <Item
             title="Talk with Our Bot"
-            path={"/app/talkbot"}
+            path="/app/talkbot"
             colors={colors}
             icon={<SupportAgent />}
           />
           <Item
-            title="Contacts Information"
-            path="/app/contacts"
+            title="Recipe Home"
+            path="/app/recipe-home"
             colors={colors}
-            icon={<ContactsOutlined />}
+            icon={<HomeOutlined />}
           />
           <Item
-            title="Invoices Balances"
-            path="/app/invoices"
+            title="Settings"
+            path="/app/settings"
             colors={colors}
-            icon={<ReceiptOutlined />}
-          />
-        </Menu>
-        <Typography
-          variant="h6"
-          color={colors.gray[300]}
-          sx={{ m: "15px 0 5px 20px" }}
-        >
-          {!collapsed ? "Pages" : " "}
-        </Typography>
-        <Menu
-          menuItemStyles={{
-            button: {
-              ":hover": {
-                color: "#868dfb",
-                background: "transparent",
-                transition: ".4s ease",
-              },
-            },
-          }}
-        >
-          <Item
-            title="Profile Form"
-            path="/app/form"
-            colors={colors}
-            icon={<PersonOutlined />}
-          />
-          <Item
-            title="Calendar"
-            path="/app/calendar"
-            colors={colors}
-            icon={<CalendarTodayOutlined />}
-          />
-          <Item
-            title="FAQ Page"
-            path="/app/faq"
-            colors={colors}
-            icon={<HelpOutlineOutlined />}
+            icon={<SettingsOutlined />}
           />
         </Menu>
       </Box>
@@ -252,4 +201,4 @@ const SideBar = () => {
   );
 };
 
-export default SideBar;
+export default SidebarUser;

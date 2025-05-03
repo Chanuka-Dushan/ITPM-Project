@@ -92,7 +92,7 @@ function Login() {
           Don’t have an account?{" "}
           <span
             className="text-purple-600 cursor-pointer hover:underline"
-            onClick={() => navigate("/signup")}
+            onClick={() => navigate("/signupoptions")}
           >
             Register here
           </span>

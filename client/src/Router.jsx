@@ -29,9 +29,12 @@ import AddRecipePage from "./pages/AddRecipePage.jsx";
 import ViewRecipe from "./pages/ViewRecipesPage.jsx";
 import UpdateRecipePage from "./pages/UpdateRecipePage.jsx";
 
+//user and profile management
 import SignUpPage from "./pages/SignUp.jsx";
 import LoginPage from "./pages/Login.jsx";
 import UserProfilePage from "./pages/UserProfile.jsx";
+import SignUpOptionsPage from "./pages/SignupOptions.jsx";
+
 
 
 import RecipeInfo from "./pages/RecipeInfo.jsx";
@@ -45,6 +48,7 @@ const AppRouter = () => {
         <Route path="/popular" element={<PopularPage />} />
         <Route path="/about" element={<AboutPage />} />
 
+        <Route path="/signupoptions" element={< SignUpOptionsPage/>}/>
         <Route path="/signup" element={< SignUpPage/>}/>
         <Route path="/login" element={< LoginPage/>}/>
 
