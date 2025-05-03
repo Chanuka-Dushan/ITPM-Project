@@ -5,6 +5,7 @@ import MealPlanningDetails from "./pages/MealPlanningDetails";
 import MealPlanningDate from "./pages/MealPlanningDate.jsx";
 import MealPlanDetailsDisplay from "./pages/MealPlanDetailsDisplay";
 import MealPlanningHome from "./pages/MealPlanningHome";
+import MealPlanningDateDisplay from "./pages/MealPlanningDateDisplay";
 import TalkBot from "./talk-bot/talkbot";
 import App from "./App";
 import {
@@ -72,6 +73,7 @@ const AppRouter = () => {
           <Route path="mealplanningdate" element={<MealPlanningDate />} />
           <Route path="mealplandetailsdisplay" element={<MealPlanDetailsDisplay />} />
           <Route path="mealplanninghome" element={<MealPlanningHome />} />
+          <Route path="mealplanningdatedisplay" element={<MealPlanningDateDisplay />} />
           <Route path="homeRecipe" element={<HomeRecipe  />} />
           <Route path="viewrecipe" element={<ViewRecipe />} />
           <Route path="add-recipe" element={<AddRecipePage />} />
