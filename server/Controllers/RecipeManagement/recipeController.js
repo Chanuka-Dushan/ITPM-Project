@@ -121,6 +121,29 @@ export async function deleteRecipe(req, res) {
   }
 }
 
+// Search recipes by name or category
+export async function searchRecipes(req, res) {
+  try {
+    const { recipeName, category } = req.query;
+
+    const query = {};
+
+    if (recipeName) {
+      query.recipeName = { $regex: recipeName, $options: 'i' }; // case-insensitive
+    }
+
+    if (category) {
+      query.category = { $regex: category, $options: 'i' }; // case-insensitive
+    }
+
+    const results = await Recipe.find(query);
+    res.status(200).json(results);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+}
+
+
 
 // Generate PDF report for a specific recipe
 export async function generateRecipePdf(req, res) {

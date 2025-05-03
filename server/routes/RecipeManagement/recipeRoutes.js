@@ -12,6 +12,8 @@ import {
   deleteRecipe
 } from "../../Controllers/RecipeManagement/recipeController.js";
 import { generateRecipePdf } from "../../Controllers/RecipeManagement/recipeController.js";
+import { searchRecipes } from "../../Controllers/RecipeManagement/recipeController.js";
+
 
 
 
@@ -42,6 +44,8 @@ router.get("/get", getAllRecipes);
 router.get("/:id", getRecipeById);
 router.put("/:id", upload.single("image"), updateRecipe);
 router.delete("/:id", deleteRecipe);
+
+router.get('/search', searchRecipes);
 
 // Add the PDF route
 router.get('/recipes/:id/report', generateRecipePdf);
