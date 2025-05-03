@@ -24,7 +24,7 @@ const upload = multer({ storage: multer.memoryStorage() });
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
 
-// Mock recipe data (same as provided)
+// Mock recipe data
 const recipes = [
   {
     id: "1",

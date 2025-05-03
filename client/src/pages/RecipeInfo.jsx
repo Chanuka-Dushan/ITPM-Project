@@ -400,7 +400,7 @@ function RecipeInfo() {
   const { id } = useParams();
   const [isChatOpen, setIsChatOpen] = useState(false);
 
-  // Mock recipe data (same as provided)
+  // Mock recipe data
   const recipes = [
     {
       id: "1",
