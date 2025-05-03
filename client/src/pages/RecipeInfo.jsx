@@ -1,9 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useParams, Link } from "react-router-dom";
-import { Clock, Users, ChevronLeft, Mic, Volume2, Square } from "lucide-react";
+import { Clock, Users, ChevronLeft, Mic, Volume2, Square, Play } from "lucide-react";
 import { motion } from "framer-motion";
-import botImg from "../assets/images/bot.png";
-import userImg from "../assets/images/user.png";
+
+// Mock images (replace with actual assets)
+const botImg = "https://via.placeholder.com/32?text=Bot";
+const userImg = "https://via.placeholder.com/32?text=User";
 
 // Custom Button Component
 function Button({ children, variant = "default", size = "default", className = "", ...props }) {
@@ -13,6 +15,7 @@ function Button({ children, variant = "default", size = "default", className = "
     outline: "border border-gray-300 bg-transparent hover:bg-gray-100",
     ghost: "bg-transparent hover:bg-gray-100",
     stop: "bg-red-500 text-white hover:bg-red-600",
+    start: "bg-green-500 text-white hover:bg-green-600",
   };
   const sizes = {
     default: "px-4 py-2",
@@ -33,12 +36,12 @@ function Button({ children, variant = "default", size = "default", className = "
 
 // ChatBot Component
 function ChatBot({ recipe, onClose }) {
-  const [userMessage, setUserMessage] = useState("");
   const [messages, setMessages] = useState([]);
   const [isTyping, setIsTyping] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [userStopped, setUserStopped] = useState(false);
+  const [userStopped, setUserStopped] = useState(true); // Start stopped
+  const [currentStep, setCurrentStep] = useState(0);
   const recognitionRef = useRef(null);
   const lastTranscriptRef = useRef("");
   const utteranceQueueRef = useRef([]);
@@ -58,7 +61,7 @@ function ChatBot({ recipe, onClose }) {
     };
   };
 
-  // Process TTS queue
+  // Process TTS queue using Web Speech API
   const speakNext = () => {
     if (isSpeakingRef.current || utteranceQueueRef.current.length === 0) return;
     isSpeakingRef.current = true;
@@ -86,12 +89,14 @@ function ChatBot({ recipe, onClose }) {
     setIsPlaying(false);
     stopRecording();
     setUserStopped(true);
+    recognitionStateRef.current = "stopped";
+    setIsRecording(false);
     console.log("Client: Cancelled all speech and recognition");
   };
 
   // Process pending transcripts
   const processPendingTranscripts = async () => {
-    if (pendingTranscriptsRef.current.length === 0) return;
+    if (pendingTranscriptsRef.current.length === 0 || processingRef.current) return;
     const transcript = pendingTranscriptsRef.current.shift();
     console.log("Client: Processing pending transcript:", transcript);
     await handleTranscript(transcript);
@@ -113,7 +118,7 @@ function ChatBot({ recipe, onClose }) {
   const handleTranscript = async (transcript) => {
     const now = Date.now();
     if (transcript === lastTranscriptRef.current && now - lastTranscriptTimeRef.current < 800) {
-      console.log("Client: Ignoring duplicate transcript:", transcript, "age:", now - lastTranscriptTimeRef.current, "ms");
+      console.log("Client: Ignoring duplicate transcript:", transcript);
       return;
     }
     lastTranscriptRef.current = transcript;
@@ -127,7 +132,7 @@ function ChatBot({ recipe, onClose }) {
       const response = await fetch("http://localhost:5000/validate-voice", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ transcript, recipe: recipe.title }),
+        body: JSON.stringify({ transcript, recipeId: recipe.id, currentStep }),
         signal: controller.signal,
       });
       clearTimeout(timeoutId);
@@ -137,32 +142,31 @@ function ChatBot({ recipe, onClose }) {
       const data = await response.json();
       console.log("Client: Received response:", data);
       if (data.error) {
-        appendMessage("bot", `Error: ${data.error}`, null);
+        appendMessage("bot", `Error: ${data.error}`);
       } else if (data.action === "stop") {
         cancelSpeech();
-        appendMessage("bot", data.message, null);
+        appendMessage("bot", data.message);
       } else if (data.action === "respond") {
         appendMessage("user", data.userMessage);
-        appendMessage("bot", data.message, data.audioUrl);
-        appendMessage("bot", "What else can I help with?", null);
+        appendMessage("bot", data.message);
+        setCurrentStep(data.nextStep || currentStep);
       } else if (data.action === "listen") {
-        appendMessage("bot", data.message, null);
+        appendMessage("bot", data.message);
       } else if (data.action === "ignore") {
-        appendMessage("bot", "Please say 'Botty' or 'Buddy' first!", null);
+        // Silent ignore
       }
     } catch (error) {
       console.error("Client: Error validating voice:", error.message);
-      appendMessage("bot", "Oops, try saying 'Botty' or 'Buddy' again!", null);
+      appendMessage("bot", "Oops, try saying 'Botty' or 'Buddy' again!");
     } finally {
       setIsTyping(false);
       processingRef.current = false;
       lastTranscriptRef.current = "";
       lastTranscriptTimeRef.current = 0;
-      pendingTranscriptsRef.current = []; // Clear pending transcripts
-      if (!userStopped) {
+      if (!userStopped && recognitionStateRef.current !== "started") {
         console.log("Client: Restarting recognition after transcript processing");
         stopRecording();
-        recognitionStateRef.current = "stopped"; // Force state reset
+        recognitionStateRef.current = "stopped";
         setTimeout(() => startRecording(), 200);
       }
     }
@@ -173,16 +177,9 @@ function ChatBot({ recipe, onClose }) {
     recognitionRef.current = initializeRecognition();
     if (recognitionRef.current) {
       const handleResult = debounce(async (event) => {
-        if (processingRef.current) {
-          console.log("Client: Ignoring transcript while processing");
-          return;
-        }
         const transcript = event.results[0][0].transcript;
-        const confidence = event.results[0][0].confidence;
-        const isFinal = event.results[0].isFinal;
-        console.log("Client: Transcript:", transcript, "Confidence:", confidence, "isFinal:", isFinal);
+        console.log("Client: Transcript:", transcript);
 
-        // Check for stop commands during speech
         if (isSpeakingRef.current && transcript.toLowerCase().includes("stop")) {
           console.log("Client: Detected stop command during speech:", transcript);
           cancelSpeech();
@@ -191,10 +188,10 @@ function ChatBot({ recipe, onClose }) {
           return;
         }
 
-        // Buffer transcripts during speech
         if (isSpeakingRef.current) {
           console.log("Client: Buffering transcript during speech:", transcript);
           pendingTranscriptsRef.current.push(transcript);
+          processPendingTranscripts();
         } else {
           await handleTranscript(transcript);
         }
@@ -204,7 +201,7 @@ function ChatBot({ recipe, onClose }) {
 
       recognitionRef.current.onerror = (event) => {
         console.error("Client: Speech recognition error:", event.error);
-        appendMessage("bot", "I missed that! Say 'Botty' or 'Buddy' again.", null);
+        appendMessage("bot", "I missed that! Say 'Botty' or 'Buddy' again.");
         processingRef.current = false;
         if (!userStopped) {
           console.log("Client: Restarting after error");
@@ -215,7 +212,7 @@ function ChatBot({ recipe, onClose }) {
       };
 
       recognitionRef.current.onend = () => {
-        console.log("Client: Speech recognition ended, isRecording:", isRecording, "recognitionState:", recognitionStateRef.current, "userStopped:", userStopped);
+        console.log("Client: Speech recognition ended, isRecording:", isRecording, "userStopped:", userStopped);
         if (!userStopped) {
           recognitionStateRef.current = "stopped";
           setIsRecording(false);
@@ -227,7 +224,6 @@ function ChatBot({ recipe, onClose }) {
         }
       };
 
-      // Watchdog timer for stalled recognition
       let watchdogTimeout;
       const startWatchdog = () => {
         clearTimeout(watchdogTimeout);
@@ -243,13 +239,10 @@ function ChatBot({ recipe, onClose }) {
 
       recognitionRef.current.onspeechstart = startWatchdog;
       recognitionRef.current.onspeechend = startWatchdog;
-
-      startRecording();
     } else {
-      appendMessage("bot", "Speech recognition not supported in your browser.", null);
+      appendMessage("bot", "Speech recognition not supported in your browser.");
     }
 
-    // Cleanup
     return () => {
       if (recognitionRef.current) recognitionRef.current.stop();
       cancelSpeech();
@@ -264,13 +257,12 @@ function ChatBot({ recipe, onClose }) {
         setIsRecording(true);
         setUserStopped(false);
         console.log("Client: Started recording");
+        appendMessage("bot", "I'm listening! Say 'Botty' or 'Buddy' to start cooking with me.");
       } catch (error) {
         console.error("Client: Error starting speech recognition:", error);
-        appendMessage("bot", "Failed to start listening. Try again.", null);
+        appendMessage("bot", "Failed to start listening. Try again.");
         setTimeout(() => startRecording(), 500);
       }
-    } else {
-      console.log("Client: Skipped startRecording, isRecording:", isRecording, "recognitionState:", recognitionStateRef.current);
     }
   };
 
@@ -283,7 +275,7 @@ function ChatBot({ recipe, onClose }) {
     }
   };
 
-  const appendMessage = (sender, message, audioUrl) => {
+  const appendMessage = (sender, message) => {
     const messageKey = `${sender}:${message}`;
     if (lastMessageRef.current[messageKey]) {
       console.log("Client: Ignoring duplicate message:", messageKey);
@@ -292,42 +284,12 @@ function ChatBot({ recipe, onClose }) {
     lastMessageRef.current[messageKey] = true;
     setTimeout(() => delete lastMessageRef.current[messageKey], 60000);
 
-    setMessages((prevMessages) => [...prevMessages, { sender, message, audioUrl }]);
-    if (!audioUrl && message) {
+    setMessages((prevMessages) => [...prevMessages, { sender, message }]);
+    if (sender === "bot" && message) {
       const utterance = new SpeechSynthesisUtterance(message);
       utterance.lang = "en-US";
       utteranceQueueRef.current.push(utterance);
       speakNext();
-    }
-  };
-
-  const sendMessage = async () => {
-    if (!userMessage || userMessage.length < 2) {
-      appendMessage("bot", "Please type a proper question!", null);
-      return;
-    }
-    appendMessage("user", userMessage);
-    setUserMessage("");
-    setIsTyping(true);
-
-    try {
-      const recipeContext = `This conversation is about the recipe: ${recipe.title}. Details: Time: ${recipe.time}, Servings: ${recipe.servings}, Category: ${recipe.category}, Author: ${recipe.author}. Answer recipe-related questions accurately. For unrelated questions, provide a brief answer and suggest asking about the recipe.`;
-      const response = await fetch("http://localhost:5000/chatwithbot", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: userMessage, context: recipeContext }),
-      });
-      if (!response.ok) {
-        throw new Error("Failed to fetch response");
-      }
-      const data = await response.json();
-      appendMessage("bot", data.message, data.audioUrl || null);
-      appendMessage("bot", "What else can I help with?", null);
-    } catch (error) {
-      console.error("Client: Error sending text message:", error);
-      appendMessage("bot", "Try asking again!", null);
-    } finally {
-      setIsTyping(false);
     }
   };
 
@@ -355,10 +317,13 @@ function ChatBot({ recipe, onClose }) {
             ✕
           </button>
         </div>
+        <div className="p-4 text-white">
+          <p>Current Step: {currentStep === 0 ? "Not started" : `Step ${currentStep}`}</p>
+        </div>
         <div className="flex-grow overflow-y-auto p-6 space-y-4">
           {messages.length === 0 && (
             <div className="text-white text-center">
-              Say "Botty" or "Buddy" to ask about {recipe.title}!
+              Click Start to begin cooking {recipe.title} with Chef Botty!
             </div>
           )}
           {messages.map((msg, index) => (
@@ -378,17 +343,6 @@ function ChatBot({ recipe, onClose }) {
                 }`}
               >
                 {msg.message}
-                {msg.audioUrl && (
-                  <button
-                    onClick={() => {
-                      const audio = new Audio(msg.audioUrl);
-                      audio.play();
-                    }}
-                    className="mt-2 text-sm text-gray-300 hover:text-white flex items-center"
-                  >
-                    <Volume2 className="h-4 w-4 mr-1" /> Replay Audio
-                  </button>
-                )}
               </div>
               {msg.sender === "user" && (
                 <img src={userImg} className="w-8 h-8 rounded-full border-2 border-blue-400" alt="User" />
@@ -411,42 +365,28 @@ function ChatBot({ recipe, onClose }) {
           )}
         </div>
         <div className="p-4 bg-opacity-20 bg-black backdrop-blur-lg sticky bottom-0 z-10 flex items-center gap-4">
-          <input
-            type="text"
-            placeholder="Type or say 'Botty' or 'Buddy'..."
-            className="flex-grow p-2 rounded-full bg-gray-800 bg-opacity-50 text-white placeholder-gray-400 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all duration-200"
-            value={userMessage}
-            onChange={(e) => setUserMessage(e.target.value)}
-            onKeyPress={(e) => e.key === "Enter" && sendMessage()}
-          />
           <Button
-            variant="ghost"
-            size="icon"
-            onClick={isRecording ? stopRecording : startRecording}
-            className={isRecording ? "bg-red-500 text-white" : "bg-purple-500 text-white"}
+            variant="start"
+            size="lg"
+            onClick={startRecording}
+            disabled={isRecording}
+            className={isRecording ? "opacity-50 cursor-not-allowed" : ""}
           >
-            <Mic className={`h-5 w-5 ${isRecording ? "animate-pulse" : ""}`} />
+            <Play className="h-5 w-5 mr-2" />
+            Start
           </Button>
           <Button
-            onClick={() => sendMessage()}
-            className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 py-2 rounded-full hover:from-purple-600 hover:to-pink-600"
+            variant="stop"
+            size="lg"
+            onClick={cancelSpeech}
+            disabled={!isRecording}
+            className={!isRecording ? "opacity-50 cursor-not-allowed" : ""}
           >
-            {isTyping ? (
-              <div className="w-5 h-5 border-4 border-t-transparent border-white rounded-full animate-spin"></div>
-            ) : (
-              "Send"
-            )}
+            <Square className="h-5 w-5 mr-2" />
+            Stop
           </Button>
-          {isPlaying && (
-            <Button
-              variant="stop"
-              size="icon"
-              onClick={cancelSpeech}
-              className="bg-red-500 text-white"
-              title="Stop Speaking and Listening"
-            >
-              <Square className="h-5 w-5" />
-            </Button>
+          {isRecording && (
+            <Mic className={`h-5 w-5 text-white ${isRecording ? "animate-pulse" : ""}`} />
           )}
           {isPlaying && <Volume2 className="h-5 w-5 text-white animate-pulse" />}
         </div>
@@ -460,7 +400,7 @@ function RecipeInfo() {
   const { id } = useParams();
   const [isChatOpen, setIsChatOpen] = useState(false);
 
-  // Mock recipe data
+  // Mock recipe data (same as provided)
   const recipes = [
     {
       id: "1",
