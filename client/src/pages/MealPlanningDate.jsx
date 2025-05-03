@@ -18,9 +18,12 @@ const MealPlanningDate = () => {
 
   const [formData, setFormData] = useState({
     UserName: "",
+    dayspreferred: "",
+    calorie: "",
     breakfast: "",
     lunch: "",
     dinner: "",
+    suggestions: "",
   });
 
   const [timeErrors, setTimeErrors] = useState({
@@ -99,6 +102,7 @@ const MealPlanningDate = () => {
     const hour12 = hour % 12 || 12;
     return `${hour12}:${minutes} ${meridiem}`;
   };
+  
 
   const getHoursFromTime = (timeString) => {
     if (!timeString) return null;
@@ -117,6 +121,7 @@ const MealPlanningDate = () => {
         error = `${name.charAt(0).toUpperCase() + name.slice(1)} time must be in PM (12:00 or later)`;
       }
     }
+    
     
     return error;
   };
@@ -228,7 +233,7 @@ const MealPlanningDate = () => {
     
     const formSubmission = {
       ...formData,
-      calorie: formData.calorie || 20,
+      calorie: parseInt(formData.calorie) || 30,
       dayspreferred: daysOfWeek.join(", "),
       mealSchedule,
       recipes // Include recipes in the submission
@@ -240,7 +245,7 @@ const MealPlanningDate = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formSubmission), 
+        body: JSON.stringify(formSubmission),
       });
 
       if (!response.ok) {
@@ -253,10 +258,12 @@ const MealPlanningDate = () => {
       
       setFormData({
         UserName: "",
+        dayspreferred: "",
+        calorie: "",
         breakfast: "",
         lunch: "",
         dinner: "",
-        
+        suggestions: "",
       });
       
       setMealSchedule(
