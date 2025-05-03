@@ -23,73 +23,73 @@ export const getUser = async (req, res) => {
     }
 };
 
+//create a new user
 export const createUser = async (req, res) => {
-    const { name, password, email } = req.body;
-    const profilePicture = req.file ? req.file.buffer : null;
-  
-    try {
-      // Find the maximum userId in the collection
-      const maxUser = await User.findOne({}, {}, { sort: { userId: -1 } });
-      let newUserId = 'U001'; // Default if no users exist
-  
-      if (maxUser) {
-        // Increment the maximum userId by 1
-        const nextId = parseInt(maxUser.userId.slice(1)) + 1;
-        newUserId = 'U' + nextId.toString().padStart(3, '0'); // Ensure 3-digit format
-      }
-  
-      // Create a new user document with the retrieved data
-      const user = await User.create({
-        userId: newUserId,
-        name,
-        password,
-        email,
-        profilePicture,
-      });
-  
-      res.status(201).json(user);
-    } catch (error) {
-      res.status(400).json({ error: error.message });
-    }
-  };
-  
-  
+  const { name, password, email, dietaryPreferences } = req.body;
+  const profilePicture = req.file ? req.file.buffer : null;
 
-  export const updateUser = async (req, res) => {
-    try {
-      const { password, name, email, role } = req.body;
-      const profilePicture = req.file?.buffer;
-  
-      const updateData = {};
-      if (name) updateData.name = name;
-      if (email) updateData.email = email;
-      if (role) updateData.role = role;
-      if (profilePicture) updateData.profilePicture = profilePicture;
-  
-      if (password) {
-        updateData.password = await bcrypt.hash(password, 10);
-      }
-  
-      const updatedUser = await User.findOneAndUpdate(
-        { userId: req.params.userId },
-        { $set: updateData },
-        {
-          new: true,
-          runValidators: true,
-          context: "query",
-        }
-      );
-  
-      if (!updatedUser) {
-        return res.status(404).json({ error: "User not found" });
-      }
-  
-      res.status(200).json(updatedUser);
-    } catch (error) {
-      res.status(400).json({ error: error.message });
+  try {
+    const maxUser = await User.findOne({}, {}, { sort: { userId: -1 } });
+    let newUserId = 'U001';
+    if (maxUser) {
+      const nextId = parseInt(maxUser.userId.slice(1)) + 1;
+      newUserId = 'U' + nextId.toString().padStart(3, '0');
     }
-  };
+
+    const user = await User.create({
+      userId: newUserId,
+      name,
+      password,
+      email,
+      profilePicture,
+      dietaryPreferences, // <-- optional on create
+    });
+
+    res.status(201).json(user);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
   
+//update a user by userId
+export const updateUser = async (req, res) => {
+  try {
+    const { password, name, email, role, dietaryPreferences } = req.body;
+    const profilePicture = req.file?.buffer;
+
+    const updateData = {};
+    if (name) updateData.name = name;
+    if (email) updateData.email = email;
+    if (role) updateData.role = role;
+    if (profilePicture) updateData.profilePicture = profilePicture;
+    if (dietaryPreferences) updateData.dietaryPreferences = dietaryPreferences;
+
+    if (password) {
+      updateData.password = await bcrypt.hash(password, 10);
+    }
+
+    const updatedUser = await User.findOneAndUpdate(
+      { userId: req.params.userId },
+      { $set: updateData },
+      {
+        new: true,
+        runValidators: true,
+        context: "query",
+      }
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    res.status(200).json(updatedUser);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+
   
   
 

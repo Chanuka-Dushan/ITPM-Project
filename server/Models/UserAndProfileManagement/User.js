@@ -11,10 +11,29 @@ const userSchema = new Schema(
     email: { type: String, required: true, unique: true },
     role: { type: String, enum: ['user', 'admin'], default: "user" },
     profilePicture: { type: Buffer, default: null }, // Store image as Buffer
+
+    // ✅ New: Dietary Preferences Enum
+    dietaryPreferences: {
+      type: [String],
+      enum: [
+        "vegan",
+        "vegetarian",
+        "keto",
+        "paleo",
+        "gluten-free",
+        "lactose-free",
+        "halal",
+        "kosher",
+        "high-protein",
+        "low-carb"
+      ],
+      default: undefined // can be null or omitted at user creation
+    }
   },
   { timestamps: true }
 );
 
+// Hash password before saving
 userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();
   try {
