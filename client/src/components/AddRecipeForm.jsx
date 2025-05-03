@@ -132,7 +132,7 @@ const AddRecipeForm = () => {
       });
 
       // Redirect to recipes page on success
-      navigate('/recipes');
+      navigate('/app/recipes');
     } catch (err) {
       console.error('Error adding recipe:', err);
       setError(err.response?.data?.message || 'Failed to add recipe. Please try again.');

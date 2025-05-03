@@ -47,7 +47,10 @@ const UpdateRecipeForm = () => {
         });
 
         if (recipe.image) {
-          setCurrentImage(recipe.image);
+          //setCurrentImage(recipe.image);
+          
+          setCurrentImage(`http://localhost:5000${recipe.image}`);
+          console.log('Current image URL:', recipe.image);
         }
 
         setLoading(false);
@@ -173,7 +176,7 @@ const UpdateRecipeForm = () => {
       });
 
       // Redirect to recipes page on success
-      navigate('/recipes');
+      navigate('/app/recipes');
     } catch (err) {
       console.error('Error updating recipe:', err);
       setError(err.response?.data?.message || 'Failed to update recipe. Please try again.');
@@ -327,7 +330,7 @@ const UpdateRecipeForm = () => {
         </div>
 
         <div className="form-actions">
-          <button type="button" onClick={() => navigate('/recipes')} className="cancel-btn">
+          <button type="button" onClick={() => navigate('/app/recipes')} className="cancel-btn">
             Cancel
           </button>
           <button type="submit" className="submit-btn" disabled={submitting}>

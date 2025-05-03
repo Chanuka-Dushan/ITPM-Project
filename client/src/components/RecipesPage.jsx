@@ -74,7 +74,7 @@ const RecipesPage = () => {
                 onClick={() => navigate(`/app/recipes/${recipe._id}`)}
                 style={{
                   backgroundImage: recipe.image
-                    ? `url("http://localhost:5000/${recipe.image}")`
+                    ? `url("http://localhost:5000${recipe.image}")`
                     : 'url("/default-recipe.jpg")',
                 }}
                 
@@ -91,14 +91,16 @@ const RecipesPage = () => {
                   <button
                     onClick={() => navigate(`/app/update-recipe/${recipe._id}`)}
                     className="edit-btn"
+                    title="Edit Recipe"
                   >
-                    <i className="fas fa-edit"></i>
+                    Edit
                   </button>
                   <button
                     onClick={() => handleDelete(recipe._id)}
                     className="delete-btn"
+                    title="Delete Recipe"
                   >
-                    <i className="fas fa-trash-alt"></i>
+                    Delete
                   </button>
                 </div>
               </div>
