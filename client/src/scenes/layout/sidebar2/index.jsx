@@ -129,7 +129,7 @@ const SidebarUser = () => {
           <Box sx={{ textAlign: "center" }}>
             <Typography variant="h3" fontWeight="bold" color={colors.gray[100]}>
               {userData?.name || "Loading..."}
-            </Typography>
+            </Typography> 
             <Typography
               variant="h6"
               fontWeight="500"
@@ -155,7 +155,7 @@ const SidebarUser = () => {
         >
           <Item
             title="Profile"
-            path="/app/profile"
+           path={`/app/profile/${userId}`}
             colors={colors}
             icon={<PersonOutlined />}
           />
@@ -191,7 +191,7 @@ const SidebarUser = () => {
           />
           <Item
             title="Settings"
-            path="/app/settings"
+            path={`/app/usersettings/${userId}`}
             colors={colors}
             icon={<SettingsOutlined />}
           />
