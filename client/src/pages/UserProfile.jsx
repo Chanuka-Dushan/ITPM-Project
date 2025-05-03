@@ -22,16 +22,18 @@ const UserProfile = () => {
             <p><strong>Name:</strong> {userData.name}</p>
             <p><strong>User ID:</strong> {userData.userId}</p>
             <p><strong>Email:</strong> {userData.email}</p>
-            {userData.dietaryPreferences && userData.dietaryPreferences.length > 0 && (
-              <div style={{ marginTop: "1rem" }}>
-                <p><strong>Dietary Preferences:</strong></p>
+            <div style={{ marginTop: "1rem" }}>
+              <p><strong>Dietary Preferences:</strong></p>
+              {userData.dietaryPreferences && userData.dietaryPreferences.length > 0 ? (
                 <ul style={styles.list}>
                   {userData.dietaryPreferences.map((pref, index) => (
                     <li key={index} style={styles.listItem}>🍽️ {pref}</li>
                   ))}
                 </ul>
-              </div>
-            )}
+              ) : (
+                <p style={{ color: "#7f8c8d" }}>None</p>
+              )}
+            </div>
           </div>
         ) : (
           <p style={styles.loading}>Loading...</p>

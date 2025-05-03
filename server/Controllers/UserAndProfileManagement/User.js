@@ -91,6 +91,7 @@ export const updateUser = async (req, res) => {
 
 
   
+
   
 
 // Delete a user by userId
@@ -106,33 +107,33 @@ export const deleteUser = async (req, res) => {
 
 // Login a user and return a JWT token along with userId
 export const loginUser = async (req, res) => {
-    const { userId, password } = req.body;
+  const { email, password } = req.body;
 
-    try {
-        // Find the user by userId
-        const user = await User.findOne({ userId });
-        if (!user) {
-            return res.status(400).json({ error: "Invalid credentials" });
-        }
+  try {
+      // Find the user by userId
+      const user = await User.findOne({ email });
+      if (!user) {
+          return res.status(400).json({ error: "Invalid credentials" });
+      }
 
-        // Check if password matches
-        const isMatch = await bcrypt.compare(password, user.password);
-        if (!isMatch) {
-            return res.status(400).json({ error: "Invalid credentials" });
-        }
+      // Check if password matches
+      const isMatch = await bcrypt.compare(password, user.password);
+      if (!isMatch) {
+          return res.status(400).json({ error: "Invalid credentials" });
+      }
 
-        // Create JWT token
-        const token = jwt.sign(
-            { userId: user.userId, name: user.name },
-            process.env.JWT_SECRET,  // Secret key from .env
-            { expiresIn: "1h" }  // Token expires in 1 hour
-        );
+      // Create JWT token
+      const token = jwt.sign(
+          { userId: user.userId, name: user.name },
+          process.env.JWT_SECRET,  // Secret key from .env
+          { expiresIn: "1h" }  // Token expires in 1 hour
+      );
 
-        // Send token and userId in response
-        res.status(200).json({ token, userId: user.userId });
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
+      // Send token and userId in response
+      res.status(200).json({ token, userId: user.userId });
+  } catch (error) {
+      res.status(500).json({ error: error.message });
+  }
 };
 
 //get image by user id

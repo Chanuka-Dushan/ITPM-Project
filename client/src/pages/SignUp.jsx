@@ -7,6 +7,7 @@ function CreateUser() {
     name: "",
     email: "",
     password: "",
+    confirmPassword: "",
     role: "user", // default role
     profilePicture: null, // default profile picture
   });
@@ -29,16 +30,44 @@ function CreateUser() {
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
-    setError("");
+    setError(""); // Clear error messages on input change
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Email validation
+    const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+    if (!emailPattern.test(formData.email)) {
+      setError("Please enter a valid email.");
+      return;
+    }
+
+    // Password validation
+    if (formData.password !== formData.confirmPassword) {
+      setError("Passwords do not match.");
+      return;
+    }
+
+    const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
+    if (!passwordPattern.test(formData.password)) {
+      setError(
+        "Password must be at least 8 characters long, with uppercase, lowercase, a number, and a special character."
+      );
+      return;
+    }
+
     try {
       const res = await axios.post("http://localhost:5000/api/user/add", formData);
       setMessage("User created successfully!");
-      setFormData({ name: "", email: "", password: "", role: formData.role, profilePicture: null });
+      setFormData({
+        name: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
+        role: formData.role,
+        profilePicture: null,
+      });
       setTimeout(() => {
         navigate("/login");
       }, 1500);
@@ -93,6 +122,19 @@ function CreateUser() {
               required
               className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
               placeholder="Enter your password"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-1">Confirm Password</label>
+            <input
+              type="password"
+              name="confirmPassword"
+              value={formData.confirmPassword}
+              onChange={handleChange}
+              required
+              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              placeholder="Re-enter your password"
             />
           </div>
 

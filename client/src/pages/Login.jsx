@@ -5,7 +5,7 @@ import { jwtDecode } from 'jwt-decode';
 
 function Login() {
   const [formData, setFormData] = useState({
-    userId: "",
+    email: "",
     password: ""
   });
 
@@ -51,15 +51,15 @@ function Login() {
 
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-1">User ID</label>
+            <label className="block text-sm font-semibold text-gray-700 mb-1">Email</label>
             <input
               type="text"
-              name="userId"
-              value={formData.userId}
+              name="email"
+              value={formData.email}
               onChange={handleChange}
               required
               className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
-              placeholder="Enter your user ID"
+              placeholder="Enter your Email"
             />
           </div>
 

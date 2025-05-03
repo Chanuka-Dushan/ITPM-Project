@@ -29,11 +29,14 @@ import AddRecipePage from "./pages/AddRecipePage.jsx";
 import ViewRecipe from "./pages/ViewRecipesPage.jsx";
 import UpdateRecipePage from "./pages/UpdateRecipePage.jsx";
 
+
+
 //user and profile management
 import SignUpPage from "./pages/SignUp.jsx";
 import LoginPage from "./pages/Login.jsx";
 import UserProfilePage from "./pages/UserProfile.jsx";
 import SignUpOptionsPage from "./pages/SignupOptions.jsx";
+import UserSettingsPage from "./pages/UserSettings.jsx";
 
 
 
@@ -59,6 +62,7 @@ const AppRouter = () => {
           <Route index element={<Dashboard />} />
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="profile/:userId" element={<UserProfilePage/>} />
+          <Route path="usersettings/:userId" element={<UserSettingsPage/>} />
           <Route path="chatbot" element={<ChatBot />} />
           <Route path="talkbot" element={<TalkBot />} />
           <Route path="mealplanning/:mealPlanId" element={<MealPlanningDetails />} />
