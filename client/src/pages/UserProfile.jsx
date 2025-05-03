@@ -22,6 +22,16 @@ const UserProfile = () => {
             <p><strong>Name:</strong> {userData.name}</p>
             <p><strong>User ID:</strong> {userData.userId}</p>
             <p><strong>Email:</strong> {userData.email}</p>
+            {userData.dietaryPreferences && userData.dietaryPreferences.length > 0 && (
+              <div style={{ marginTop: "1rem" }}>
+                <p><strong>Dietary Preferences:</strong></p>
+                <ul style={styles.list}>
+                  {userData.dietaryPreferences.map((pref, index) => (
+                    <li key={index} style={styles.listItem}>🍽️ {pref}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </div>
         ) : (
           <p style={styles.loading}>Loading...</p>
@@ -62,6 +72,13 @@ const styles = {
   loading: {
     textAlign: "center",
     color: "#95a5a6",
+  },
+  list: {
+    marginLeft: "1rem",
+    paddingLeft: "1rem",
+  },
+  listItem: {
+    marginBottom: "0.5rem",
   },
 };
 
