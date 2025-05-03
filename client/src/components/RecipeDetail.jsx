@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import './RecipeDetail.css';
-
-
+import SubstituteFinder from '../components/SubstituteFinder';
+import jsPDF from 'jspdf';
+import html2pdf from 'html2pdf.js';
 
 const RecipeDetail = () => {
   const { id } = useParams();
@@ -17,7 +18,6 @@ const RecipeDetail = () => {
       try {
         const response = await axios.get(`/api/recipes/${id}`);
 
-        // Ensure fallback structure to avoid undefined values
         const data = response.data;
         setRecipe({
           ...data,
@@ -46,7 +46,39 @@ const RecipeDetail = () => {
       }
     }
   };
-  
+
+  const generatePDF = () => {
+    const doc = new jsPDF();
+
+    // Title
+    doc.setFontSize(18);
+    doc.text(recipe.recipeName, 14, 20);
+
+    // Category
+    doc.setFontSize(12);
+    doc.text(`Category: ${recipe.category}`, 14, 30);
+
+    // Dietary Preference
+    doc.text(`Dietary Preference: ${recipe.dietaryPreference}`, 14, 40);
+
+    // Time
+    doc.text(`Time: ${recipe.time}`, 14, 50);
+
+    // Ingredients
+    doc.text('Ingredients:', 14, 60);
+    recipe.ingredients.forEach((ingredient, index) => {
+      doc.text(`${ingredient.name}: ${ingredient.quantity}`, 14, 70 + index * 10);
+    });
+
+    // Instructions
+    doc.text('Instructions:', 14, 80 + recipe.ingredients.length * 10);
+    recipe.instructions.split('\n').forEach((paragraph, index) => {
+      doc.text(paragraph, 14, 90 + (index + recipe.ingredients.length) * 10);
+    });
+
+    // Save the PDF
+    doc.save(`${recipe.recipeName}.pdf`);
+  };
 
   if (loading) return <div className="loading">Loading recipe...</div>;
   if (error) return <div className="error-message">{error}</div>;
@@ -71,6 +103,12 @@ const RecipeDetail = () => {
           >
             <i className="fas fa-trash-alt"></i> Delete Recipe
           </button>
+          <button 
+            onClick={generatePDF} 
+            className="pdf-btn"
+          >
+            <i className="fas fa-file-pdf"></i> Generate PDF
+          </button>
         </div>
       </div>
 
@@ -91,15 +129,14 @@ const RecipeDetail = () => {
         </div>
 
         {(recipe.imageUrl || recipe.image) && (
-        <div className="recipe-image-container">
-         <img 
-          src={`http://localhost:5000${recipe.imageUrl || recipe.image}`} 
-          alt={recipe.recipeName} 
-          className="recipe-detail-image" 
-         />
-        </div>
-      )}
-
+          <div className="recipe-image-container">
+            <img 
+              src={`http://localhost:5000${recipe.imageUrl || recipe.image}`} 
+              alt={recipe.recipeName} 
+              className="recipe-detail-image" 
+            />
+          </div>
+        )}
 
         <div className="recipe-sections">
           <div className="ingredients-section">

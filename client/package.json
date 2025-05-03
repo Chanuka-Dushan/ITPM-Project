@@ -32,6 +32,8 @@
     "formic": "^0.0.10",
     "formik": "^2.4.6",
     "framer-motion": "^12.4.11",
+    "html2pdf.js": "^0.10.3",
+    "jspdf": "^3.0.1",
     "lucide-react": "^0.485.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
