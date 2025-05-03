@@ -1,4 +1,5 @@
 import Navbar from "./layout/navbar";
+import SideBar2 from "./layout/sidebar2";
 import SideBar from "./layout/sidebar";
 import Dashboard from "./dashboard";
 import Team from "./team";
@@ -16,6 +17,7 @@ import Geography from "./geography";
 export {
   Navbar,
   SideBar,
+  SideBar2,
   Dashboard,
   Team,
   Invoices,

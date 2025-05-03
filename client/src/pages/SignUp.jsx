@@ -1,17 +1,31 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 function CreateUser() {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
-    password: ""
+    password: "",
+    role: "user", // default role
+    profilePicture: null, // default profile picture
   });
 
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    const roleParam = searchParams.get("role");
+    if (roleParam === "admin" || roleParam === "user") {
+      setFormData((prevData) => ({
+        ...prevData,
+        role: roleParam,
+      }));
+    }
+  }, [location.search]);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -24,9 +38,9 @@ function CreateUser() {
     try {
       const res = await axios.post("http://localhost:5000/api/user/add", formData);
       setMessage("User created successfully!");
-      setFormData({ name: "", email: "", password: "" });
+      setFormData({ name: "", email: "", password: "", role: formData.role, profilePicture: null });
       setTimeout(() => {
-        navigate("/login"); // 👈 Redirect to login page
+        navigate("/login");
       }, 1500);
     } catch (err) {
       if (err.response?.data?.message) {
