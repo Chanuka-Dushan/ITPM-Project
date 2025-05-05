@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import { Search, ChevronRight, Clock, Users, Mic } from "lucide-react"; // Added Mic for bot icon
+import { Search, ChevronRight, Clock, Users, Mic } from "lucide-react";
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion"; // For popup animations
-import botImg from "../assets/images/bot.png"; // Ensure paths are correct
+import { motion } from "framer-motion";
+import botImg from "../assets/images/bot.png";
 import userImg from "../assets/images/user.png";
 
-// Custom Button Component (unchanged)
+// Custom Button Component
 function Button({ children, variant = "default", size = "default", className = "", ...props }) {
   const baseStyles = "inline-flex items-center justify-center rounded font-medium transition-colors";
   const variants = {
@@ -30,7 +30,7 @@ function Button({ children, variant = "default", size = "default", className = "
   );
 }
 
-// Custom Input Component (unchanged)
+// Custom Input Component
 function Input({ className = "", ...props }) {
   return (
     <input
@@ -40,7 +40,7 @@ function Input({ className = "", ...props }) {
   );
 }
 
-// Custom Card Components (unchanged)
+// Custom Card Components
 function Card({ children, className = "", ...props }) {
   return (
     <div className={`border border-gray-200 rounded-lg bg-white ${className}`} {...props}>
@@ -65,7 +65,7 @@ function CardFooter({ children, className = "", ...props }) {
   );
 }
 
-// Custom Tabs Components (unchanged)
+// Custom Tabs Components
 function Tabs({ defaultValue, children }) {
   const [activeTab, setActiveTab] = useState(defaultValue);
   return (
@@ -104,7 +104,7 @@ function TabsContent({ children, value, activeTab, className = "" }) {
   ) : null;
 }
 
-// ChatBot Component (modified to accept recipe context)
+// ChatBot Component
 function ChatBot({ recipe, onClose }) {
   const [userMessage, setUserMessage] = useState("");
   const [messages, setMessages] = useState([]);
@@ -136,14 +136,12 @@ function ChatBot({ recipe, onClose }) {
 
   const getBotResponse = async (userMessage) => {
     try {
-      // Special case for "who is dushan"
       if (userMessage.toLowerCase().includes("who is dushan")) {
         appendMessage("bot", "He is the greatest coder alive.");
         setIsTyping(false);
         return;
       }
 
-      // Prepare recipe context to send to the server
       const recipeContext = `This conversation is about the recipe: ${recipe.title}. Details: Time: ${recipe.time}, Servings: ${recipe.servings}, Category: ${recipe.category}, Author: ${recipe.author}. Only respond to questions related to this recipe.`;
 
       const response = await fetch("http://localhost:5000/chatwithbot", {
@@ -151,7 +149,7 @@ function ChatBot({ recipe, onClose }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           message: userMessage,
-          context: recipeContext, // Pass recipe context to the server
+          context: recipeContext,
         }),
       });
 
@@ -184,7 +182,6 @@ function ChatBot({ recipe, onClose }) {
         className="bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-800 w-full max-w-lg h-[80vh] rounded-lg shadow-xl flex flex-col"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Chat Header */}
         <div className="p-4 flex justify-between items-center bg-opacity-20 bg-black backdrop-blur-lg sticky top-0 z-10">
           <h1 className="text-xl font-bold text-white tracking-wide">AI Recipe Agent - {recipe.title}</h1>
           <button
@@ -194,8 +191,6 @@ function ChatBot({ recipe, onClose }) {
             ✕
           </button>
         </div>
-
-        {/* Chat Messages */}
         <div className="flex-grow overflow-y-auto p-6 space-y-4">
           {messages.length === 0 && (
             <div className="text-white text-center">Ask me anything about {recipe.title}!</div>
@@ -238,8 +233,6 @@ function ChatBot({ recipe, onClose }) {
             </motion.div>
           )}
         </div>
-
-        {/* Chat Input */}
         <div className="p-4 bg-opacity-20 bg-black backdrop-blur-lg sticky bottom-0 z-10 flex items-center gap-4">
           <input
             type="text"
@@ -310,7 +303,7 @@ function RecipeHome() {
 
   return (
     <div className="flex min-h-screen flex-col">
-      {/* Navbar (unchanged) */}
+      {/* Navbar */}
       <header className="sticky top-0 z-50 w-full border-b bg-gray-100">
         <div className="flex h-16 items-center justify-between max-w-7xl mx-auto px-4">
           <div className="flex items-center gap-2">
@@ -319,6 +312,7 @@ function RecipeHome() {
               <span className="hidden font-bold sm:inline-block">RecipeHub</span>
             </Link>
           </div>
+
           <div className="hidden md:flex md:flex-1 md:items-center md:justify-center">
             <nav className="flex items-center space-x-6 text-sm font-medium">
               <Link to="/" className="font-bold transition-colors hover:text-blue-500">Home</Link>
@@ -328,6 +322,7 @@ function RecipeHome() {
               <Link to="/about" className="transition-colors hover:text-blue-500">About</Link>
             </nav>
           </div>
+
           <div className="flex items-center gap-2">
             <div className="relative hidden sm:block">
               <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-500" />
@@ -339,7 +334,11 @@ function RecipeHome() {
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
             </div>
-            <Button variant="default" size="sm" className="hidden sm:flex">Sign In</Button>
+            <Link to="/login">
+              <Button variant="default" size="sm" className="hidden sm:flex">
+                Sign In
+              </Button>
+            </Link>
             <Button variant="outline" size="sm" className="md:hidden">
               <Search className="h-4 w-4" />
               <span className="sr-only">Search</span>
@@ -368,7 +367,7 @@ function RecipeHome() {
       </header>
 
       <main className="flex-1">
-        {/* Hero Banner (unchanged) */}
+        {/* Hero Banner */}
         <section className="relative">
           <div className="relative h-[500px] w-full overflow-hidden">
             <img
@@ -392,7 +391,7 @@ function RecipeHome() {
           </div>
         </section>
 
-        {/* Categories (unchanged) */}
+        {/* Categories */}
         <section className="py-12 max-w-7xl mx-auto px-4">
           <div className="flex items-center justify-between">
             <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">Categories</h2>
@@ -415,7 +414,7 @@ function RecipeHome() {
           </div>
         </section>
 
-        {/* Recipe Tabs (modified to include bot icon) */}
+        {/* Recipe Tabs */}
         <section className="py-12 max-w-7xl mx-auto px-4">
           <Tabs defaultValue="featured">
             <div className="flex items-center justify-between">
@@ -467,6 +466,9 @@ function RecipeHome() {
                         <Users className="mr-1 h-4 w-4" />
                         {recipe.servings} servings
                       </div>
+                      <Link to={`/recipe-info/${recipe.id}`}>
+                        <Button variant="default" size="sm">Cook Now</Button>
+                      </Link>
                     </CardFooter>
                   </Card>
                 ))}
@@ -512,6 +514,9 @@ function RecipeHome() {
                         <Users className="mr-1 h-4 w-4" />
                         {recipe.servings} servings
                       </div>
+                      <Link to={`/recipe-info/${recipe.id}`}>
+                        <Button variant="default" size="sm">Cook Now</Button>
+                      </Link>
                     </CardFooter>
                   </Card>
                 ))}
@@ -520,7 +525,7 @@ function RecipeHome() {
           </Tabs>
         </section>
 
-        {/* Newsletter (unchanged) */}
+        {/* Newsletter */}
         <section className="bg-gray-100 py-12">
           <div className="max-w-7xl mx-auto px-4">
             <div className="mx-auto max-w-2xl text-center">
@@ -537,7 +542,7 @@ function RecipeHome() {
         </section>
       </main>
 
-      {/* Footer (unchanged) */}
+      {/* Footer */}
       <footer className="border-t bg-gray-100">
         <div className="py-8 md:py-12 max-w-7xl mx-auto px-4">
           <div className="grid grid-cols-2 gap-8 md:grid-cols-4 lg:grid-cols-5">
@@ -615,7 +620,7 @@ function RecipeHome() {
       </footer>
 
       {/* ChatBot Popup */}
-      {isChatOpen && <ChatBot recipe={selectedRecipe} onClose={handleCloseChat} />}
+      {isChatOpen && selectedRecipe && <ChatBot recipe={selectedRecipe} onClose={handleCloseChat} />}
     </div>
   );
 }

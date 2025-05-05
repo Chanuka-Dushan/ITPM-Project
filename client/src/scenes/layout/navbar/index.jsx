@@ -5,6 +5,8 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import { UserContext, ToggledContext } from "../../../App";
 import { tokens, ColorModeContext } from "../../../theme";
 import { useContext } from "react";
 import {
@@ -16,7 +18,7 @@ import {
   SearchOutlined,
   SettingsOutlined,
 } from "@mui/icons-material";
-import { ToggledContext } from "../../../App";
+
 const Navbar = () => {
   const theme = useTheme();
   const colorMode = useContext(ColorModeContext);
@@ -24,6 +26,18 @@ const Navbar = () => {
   const isMdDevices = useMediaQuery("(max-width:768px)");
   const isXsDevices = useMediaQuery("(max-width:466px)");
   const colors = tokens(theme.palette.mode);
+
+  const navigate = useNavigate();
+  const userId = useContext(UserContext);
+
+  const handleProfileClick = () => {
+    if (userId) {
+      navigate(`/app/profile/${userId}`);
+    } else {
+      console.error("User ID not found");
+    }
+  };
+
   return (
     <Box
       display="flex"
@@ -66,7 +80,7 @@ const Navbar = () => {
         <IconButton>
           <SettingsOutlined />
         </IconButton>
-        <IconButton>
+        <IconButton onClick={handleProfileClick}>
           <PersonOutlined />
         </IconButton>
       </Box>

@@ -231,12 +231,14 @@ const MealPlanningDate = () => {
     
     const formSubmission = {
       ...formData,
+      calorie: parseInt(formData.calorie) || 30,
+      dayspreferred: daysOfWeek.join(", "),
       mealSchedule,
       recipes // Include recipes in the submission
     };
 
     try {
-      const response = await fetch("http://localhost:5000/api/meals", {
+      const response = await fetch("http://localhost:5000/api/meals/create", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

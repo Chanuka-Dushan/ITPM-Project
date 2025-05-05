@@ -5,9 +5,12 @@ import cors from "cors";
 import dotenv from "dotenv";
 import fetch from "node-fetch";
 import multer from "multer";
+
+//import routes
 import mealPlanningRoute from "./routes/MealPlanning/MealPlanningDetails.js";
 import MealPlanningDate from "./routes/MealPlanning/MealPlanningDate.js";
-import recipeRoutes from "./routes/RecipeManagement/recipeRoutes.js"
+import recipeRoutes from "./routes/RecipeManagement/recipeRoutes.js";
+import userRoutes from "./routes/UserAndProfileManagement/User.js";
 
 
 dotenv.config();
@@ -15,12 +18,22 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 const MONGO_URI = process.env.MONGO_URI;
+const ALLOWED_ORIGIN = process.env.ALLOWED_ORIGIN || "http://localhost:3000"; // Default to localhost if not set  
 
 // Middleware
-app.use(cors());
+const corsOptions = {
+  origin: ALLOWED_ORIGIN,
+  credentials: true, // Enable this if you're using cookies or HTTP authentication
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
+
 app.use('/api/mealplans', mealPlanningRoute);
-app.use('/api/meals',MealPlanningDate)
+app.use('/api/meals',MealPlanningDate);
+app.use("/api/recipes", recipeRoutes);
+app.use('/api/user', userRoutes);
+
 // Multer setup for audio uploads (not used here but kept for compatibility)
 const upload = multer({ storage: multer.memoryStorage() });
 
@@ -244,7 +257,6 @@ mongoose
   .catch((err) => console.log(err));
 
   
-app.use("/api/recipes", recipeRoutes);
 
 
 // Sample Route
