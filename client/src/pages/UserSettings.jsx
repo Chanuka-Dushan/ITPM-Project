@@ -158,150 +158,461 @@ const SettingsPage = () => {
   };
 
   return (
-    <Box p={4}>
-      <Typography variant="h4" gutterBottom>
-        Settings
-      </Typography>
+    <Box sx={{
+      minHeight: "100vh",
+      background: "linear-gradient(to bottom right, #6366F1, #9333EA)",
+      py: 4,
+      px: 2,
+      display: "flex",
+      justifyContent: "center"
+    }}>
+      <Box sx={{
+        width: "100%",
+        maxWidth: "800px",
+        bgcolor: "white",
+        borderRadius: "12px",
+        boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
+        p: 4
+      }}>
+        <Typography variant="h4" gutterBottom sx={{
+          color: "#4F46E5",
+          fontWeight: 700,
+          textAlign: "center",
+          mb: 4
+        }}>
+          Settings
+        </Typography>
 
-      {/* Section 1: Profile Picture */}
-      <Box mb={4}>
-        <Typography variant="h6">Edit Profile Picture</Typography>
-        {previewPic && <img src={previewPic} alt="Profile" width={120} />}
-        <Input type="file" onChange={handleProfilePicChange} />
-        <Button variant="contained" onClick={handleProfilePicUpload}>
-          Update Picture
-        </Button>
-        <Button
-          variant="outlined"
-          color="error"
-          onClick={handleCancelProfilePic}
-          sx={{ ml: 2 }}
-        >
-          Cancel
-        </Button>
-      </Box>
-      <Divider />
-
-      {/* Section 2: Edit Name and Email */}
-      <Box mt={4} mb={4}>
-        <Typography variant="h6">Edit Name & Email</Typography>
-        <Input
-          placeholder="Name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
-        <Input
-          placeholder="Email"
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        {emailError && (
-          <Typography variant="body2" color="error" sx={{ mt: 1 }}>
-            {emailError}
+        {/* Section 1: Profile Picture */}
+        <Box mb={4}>
+          <Typography variant="h6" sx={{
+            color: "#4B5563", 
+            fontWeight: 600,
+            mb: 2
+          }}>
+            Edit Profile Picture
           </Typography>
-        )}
-        <Button
-          variant="contained"
-          onClick={handleEmailUpdate}
-          sx={{ mr: 2 }}
-        >
-          Update Details
-        </Button>
-        <Button
-          variant="outlined"
-          color="error"
-          onClick={handleCancelNameEmail}
-          sx={{ ml: 2 }}
-        >
-          Cancel
-        </Button>
-      </Box>
-      <Divider />
+          <Box sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            mb: 2
+          }}>
+            {previewPic && (
+              <Box sx={{
+                width: 120,
+                height: 120,
+                borderRadius: "50%",
+                overflow: "hidden",
+                border: "3px solid #6366F1",
+                mb: 2
+              }}>
+                <img 
+                  src={previewPic} 
+                  alt="Profile" 
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover"
+                  }}
+                />
+              </Box>
+            )}
+            <Input 
+              type="file" 
+              onChange={handleProfilePicChange}
+              sx={{
+                mb: 2,
+                "&::before": {
+                  border: "none"
+                },
+                "&::after": {
+                  border: "none"
+                }
+              }} 
+            />
+          </Box>
+          <Box sx={{ display: "flex", gap: 2 }}>
+            <Button 
+              variant="contained" 
+              onClick={handleProfilePicUpload}
+              sx={{
+                bgcolor: "#4F46E5",
+                "&:hover": {
+                  bgcolor: "#4338CA"
+                },
+                borderRadius: "8px",
+                boxShadow: "none",
+                px: 3
+              }}
+            >
+              Update Picture
+            </Button>
+            <Button
+              variant="outlined"
+              onClick={handleCancelProfilePic}
+              sx={{
+                color: "#4F46E5",
+                borderColor: "#4F46E5",
+                "&:hover": {
+                  borderColor: "#4338CA",
+                  bgcolor: "rgba(79, 70, 229, 0.04)"
+                },
+                borderRadius: "8px"
+              }}
+            >
+              Cancel
+            </Button>
+          </Box>
+        </Box>
+        <Divider sx={{ my: 3, borderColor: "#E5E7EB" }} />
 
-      {/* Section 3: Dietary Preferences */}
-      <Box mt={4} mb={4}>
-        <Typography variant="h6">Dietary Preferences</Typography>
-        <Select
-          multiple
-          value={dietaryPreferences}
-          onChange={(e) => setDietaryPreferences(e.target.value)}
-          fullWidth
-        >
-          {dietaryEnum.map((option) => (
-            <MenuItem key={option} value={option}>
-              {option}
-            </MenuItem>
-          ))}
-        </Select>
+        {/* Section 2: Edit Name and Email */}
+        <Box mb={4}>
+          <Typography variant="h6" sx={{
+            color: "#4B5563", 
+            fontWeight: 600,
+            mb: 2
+          }}>
+            Edit Name & Email
+          </Typography>
+          <Box sx={{ mb: 2 }}>
+            <Typography sx={{ 
+              fontSize: "0.875rem", 
+              fontWeight: 500, 
+              color: "#4B5563",
+              mb: 0.5
+            }}>
+              Name
+            </Typography>
+            <Input
+              placeholder="Name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              fullWidth
+              sx={{
+                p: 1,
+                border: "1px solid #D1D5DB",
+                borderRadius: "8px",
+                "&::before": {
+                  border: "none"
+                },
+                "&::after": {
+                  border: "none"
+                },
+                "&:hover:not(.Mui-disabled):before": {
+                  border: "none"
+                }
+              }}
+            />
+          </Box>
+          <Box sx={{ mb: 2 }}>
+            <Typography sx={{ 
+              fontSize: "0.875rem", 
+              fontWeight: 500, 
+              color: "#4B5563",
+              mb: 0.5
+            }}>
+              Email
+            </Typography>
+            <Input
+              placeholder="Email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              fullWidth
+              sx={{
+                p: 1,
+                border: "1px solid #D1D5DB",
+                borderRadius: "8px",
+                "&::before": {
+                  border: "none"
+                },
+                "&::after": {
+                  border: "none"
+                },
+                "&:hover:not(.Mui-disabled):before": {
+                  border: "none"
+                }
+              }}
+            />
+          </Box>
+          {emailError && (
+            <Typography sx={{ 
+              color: "#DC2626", 
+              fontSize: "0.875rem",
+              mb: 2
+            }}>
+              {emailError}
+            </Typography>
+          )}
+          <Box sx={{ display: "flex", gap: 2, mt: 2 }}>
+            <Button
+              variant="contained"
+              onClick={handleEmailUpdate}
+              sx={{
+                bgcolor: "#4F46E5",
+                "&:hover": {
+                  bgcolor: "#4338CA"
+                },
+                borderRadius: "8px",
+                boxShadow: "none",
+                px: 3
+              }}
+            >
+              Update Details
+            </Button>
+            <Button
+              variant="outlined"
+              onClick={handleCancelNameEmail}
+              sx={{
+                color: "#4F46E5",
+                borderColor: "#4F46E5",
+                "&:hover": {
+                  borderColor: "#4338CA",
+                  bgcolor: "rgba(79, 70, 229, 0.04)"
+                },
+                borderRadius: "8px"
+              }}
+            >
+              Cancel
+            </Button>
+          </Box>
+        </Box>
+        <Divider sx={{ my: 3, borderColor: "#E5E7EB" }} />
 
-        <Box mt={2}>
-          <Button
-            variant="contained"
-            onClick={() => handleUpdate({ dietaryPreferences })}
-            sx={{ mr: 2 }}
+        {/* Section 3: Dietary Preferences */}
+        <Box mb={4}>
+          <Typography variant="h6" sx={{
+            color: "#4B5563", 
+            fontWeight: 600,
+            mb: 2
+          }}>
+            Dietary Preferences
+          </Typography>
+          <Typography sx={{ 
+            fontSize: "0.875rem", 
+            fontWeight: 500, 
+            color: "#4B5563",
+            mb: 0.5
+          }}>
+            Select Preferences
+          </Typography>
+          <Select
+            multiple
+            value={dietaryPreferences}
+            onChange={(e) => setDietaryPreferences(e.target.value)}
+            fullWidth
+            sx={{
+              mb: 2,
+              borderRadius: "8px",
+              "& .MuiOutlinedInput-notchedOutline": {
+                borderColor: "#D1D5DB"
+              },
+              "&:hover .MuiOutlinedInput-notchedOutline": {
+                borderColor: "#9CA3AF"
+              },
+              "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                borderColor: "#4F46E5"
+              }
+            }}
           >
-            Update Preferences
-          </Button>
-          <Button
-            variant="outlined"
-            color="warning"
-            onClick={() => setDietaryPreferences([])}
+            {dietaryEnum.map((option) => (
+              <MenuItem key={option} value={option}>
+                {option}
+              </MenuItem>
+            ))}
+          </Select>
+
+          <Box sx={{ display: "flex", gap: 2, mt: 2 }}>
+            <Button
+              variant="contained"
+              onClick={() => handleUpdate({ dietaryPreferences })}
+              sx={{
+                bgcolor: "#4F46E5",
+                "&:hover": {
+                  bgcolor: "#4338CA"
+                },
+                borderRadius: "8px",
+                boxShadow: "none"
+              }}
+            >
+              Update Preferences
+            </Button>
+            <Button
+              variant="outlined"
+              onClick={() => setDietaryPreferences([])}
+              sx={{
+                color: "#F59E0B",
+                borderColor: "#F59E0B",
+                "&:hover": {
+                  borderColor: "#D97706",
+                  bgcolor: "rgba(245, 158, 11, 0.04)"
+                },
+                borderRadius: "8px"
+              }}
+            >
+              Clear Preferences
+            </Button>
+            <Button
+              variant="outlined"
+              onClick={handleCancelDietaryPreferences}
+              sx={{
+                color: "#4F46E5",
+                borderColor: "#4F46E5",
+                "&:hover": {
+                  borderColor: "#4338CA",
+                  bgcolor: "rgba(79, 70, 229, 0.04)"
+                },
+                borderRadius: "8px"
+              }}
+            >
+              Cancel
+            </Button>
+          </Box>
+        </Box>
+        <Divider sx={{ my: 3, borderColor: "#E5E7EB" }} />
+
+        {/* Section 4: Reset Password */}
+        <Box mb={4}>
+          <Typography variant="h6" sx={{
+            color: "#4B5563", 
+            fontWeight: 600,
+            mb: 2
+          }}>
+            Reset Password
+          </Typography>
+          <Box sx={{ mb: 2 }}>
+            <Typography sx={{ 
+              fontSize: "0.875rem", 
+              fontWeight: 500, 
+              color: "#4B5563",
+              mb: 0.5
+            }}>
+              New Password
+            </Typography>
+            <Input
+              placeholder="New Password"
+              type="password"
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+              fullWidth
+              sx={{
+                p: 1,
+                border: "1px solid #D1D5DB",
+                borderRadius: "8px",
+                "&::before": {
+                  border: "none"
+                },
+                "&::after": {
+                  border: "none"
+                },
+                "&:hover:not(.Mui-disabled):before": {
+                  border: "none"
+                }
+              }}
+            />
+          </Box>
+          <Box sx={{ mb: 2 }}>
+            <Typography sx={{ 
+              fontSize: "0.875rem", 
+              fontWeight: 500, 
+              color: "#4B5563",
+              mb: 0.5
+            }}>
+              Confirm Password
+            </Typography>
+            <Input
+              placeholder="Confirm Password"
+              type="password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              fullWidth
+              sx={{
+                p: 1,
+                border: "1px solid #D1D5DB",
+                borderRadius: "8px",
+                "&::before": {
+                  border: "none"
+                },
+                "&::after": {
+                  border: "none"
+                },
+                "&:hover:not(.Mui-disabled):before": {
+                  border: "none"
+                }
+              }}
+            />
+          </Box>
+          {passwordError && (
+            <Typography sx={{ 
+              color: "#DC2626", 
+              fontSize: "0.875rem",
+              mb: 2
+            }}>
+              {passwordError}
+            </Typography>
+          )}
+          <Button 
+            variant="contained" 
+            onClick={handlePasswordReset}
+            sx={{
+              bgcolor: "#4F46E5",
+              "&:hover": {
+                bgcolor: "#4338CA"
+              },
+              borderRadius: "8px",
+              boxShadow: "none",
+              mt: 1
+            }}
           >
-            Clear Preferences
-          </Button>
-          <Button
-            variant="outlined"
-            color="error"
-            onClick={handleCancelDietaryPreferences}
-            sx={{ ml: 2 }}
-          >
-            Cancel
+            Reset Password
           </Button>
         </Box>
-      </Box>
-      <Divider />
+        <Divider sx={{ my: 3, borderColor: "#E5E7EB" }} />
 
-      {/* Section 4: Reset Password */}
-      <Box mt={4} mb={4}>
-        <Typography variant="h6">Reset Password</Typography>
-        <Input
-          placeholder="New Password"
-          type="password"
-          value={newPassword}
-          onChange={(e) => setNewPassword(e.target.value)}
-        />
-        <Input
-          placeholder="Confirm Password"
-          type="password"
-          value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
-        />
-        {passwordError && (
-          <Typography variant="body2" color="error" sx={{ mt: 1 }}>
-            {passwordError}
+        {/* Section 5: Sign Out & Delete */}
+        <Box mt={4}>
+          <Typography variant="h6" sx={{
+            color: "#4B5563", 
+            fontWeight: 600,
+            mb: 2
+          }}>
+            Account Actions
           </Typography>
-        )}
-        <Button variant="contained" onClick={handlePasswordReset}>
-          Reset Password
-        </Button>
-      </Box>
-      <Divider />
-
-      {/* Section 5: Sign Out & Delete */}
-      <Box mt={4}>
-        <Typography variant="h6">Account Actions</Typography>
-        <Button
-          variant="outlined"
-          color="error"
-          onClick={handleSignOut}
-          sx={{ mr: 2 }}
-        >
-          Sign Out
-        </Button>
-        <Button color="error" variant="contained" onClick={handleDelete}>
-          Delete My Account
-        </Button>
+          <Box sx={{ display: "flex", gap: 2 }}>
+            <Button
+              variant="outlined"
+              onClick={handleSignOut}
+              sx={{
+                color: "#4F46E5",
+                borderColor: "#4F46E5",
+                "&:hover": {
+                  borderColor: "#4338CA",
+                  bgcolor: "rgba(79, 70, 229, 0.04)"
+                },
+                borderRadius: "8px"
+              }}
+            >
+              Sign Out
+            </Button>
+            <Button 
+              color="error" 
+              variant="contained" 
+              onClick={handleDelete}
+              sx={{
+                bgcolor: "#DC2626",
+                "&:hover": {
+                  bgcolor: "#B91C1C"
+                },
+                borderRadius: "8px",
+                boxShadow: "none"
+              }}
+            >
+              Delete My Account
+            </Button>
+          </Box>
+        </Box>
       </Box>
     </Box>
   );

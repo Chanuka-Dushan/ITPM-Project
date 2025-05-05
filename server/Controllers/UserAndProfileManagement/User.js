@@ -156,5 +156,50 @@ export const getUserProfilePicture = async (req, res) => {
       res.status(500).json({ error: error.message });
     }
   };
+
+
+  // controllers/userController.js
+
+  export const generateDietarySummaryReport = async (req, res) => {
+    try {
+        const users = await User.find({ role: "user" });
+        console.log("Users fetched: ", users); // Log the users to debug
+
+        // Continue with counting preferences
+        const preferenceCounts = {
+            vegan: 0,
+            vegetarian: 0,
+            keto: 0,
+            paleo: 0,
+            "gluten-free": 0,
+            "lactose-free": 0,
+            halal: 0,
+            kosher: 0,
+            "high-protein": 0,
+            "low-carb": 0,
+        };
+
+        users.forEach(user => {
+            if (Array.isArray(user.dietaryPreferences)) {
+                user.dietaryPreferences.forEach(pref => {
+                    if (preferenceCounts.hasOwnProperty(pref)) {
+                        preferenceCounts[pref]++;
+                    }
+                });
+            }
+        });
+
+        res.status(200).json({
+            message: "Dietary Summary Report Generated",
+            report: preferenceCounts,
+        });
+    } catch (error) {
+        console.error(error);  // Log errors for debugging
+        res.status(500).json({ error: error.message });
+    }
+};
+
+
+
   
   

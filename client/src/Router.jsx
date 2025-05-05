@@ -37,6 +37,8 @@ import LoginPage from "./pages/Login.jsx";
 import UserProfilePage from "./pages/UserProfile.jsx";
 import SignUpOptionsPage from "./pages/SignupOptions.jsx";
 import UserSettingsPage from "./pages/UserSettings.jsx";
+import DiaterySummaryPage from "./pages/UserDietarySummary.jsx";
+
 
 
 
@@ -61,6 +63,8 @@ const AppRouter = () => {
         <Route path="/app/*" element={<App />}> {/* Added wildcard * here */}
           <Route index element={<Dashboard />} />
           <Route path="dashboard" element={<Dashboard />} />
+          <Route path="r" element={<RecipeHome />} />
+          <Route path="diaterysummary" element={<DiaterySummaryPage />} />
           <Route path="profile/:userId" element={<UserProfilePage/>} />
           <Route path="usersettings/:userId" element={<UserSettingsPage/>} />
           <Route path="chatbot" element={<ChatBot />} />

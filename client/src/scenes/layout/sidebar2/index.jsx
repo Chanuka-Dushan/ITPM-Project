@@ -161,7 +161,7 @@ const SidebarUser = () => {
           />
           <Item
             title="Recipes For You"
-            path="/app/recipes-for-you"
+            path="app/r"
             colors={colors}
             icon={<FavoriteBorderOutlined />}
           />
@@ -189,6 +189,14 @@ const SidebarUser = () => {
             colors={colors}
             icon={<HomeOutlined />}
           />
+
+          <Item
+            title="Diatary Summary"
+            path="/app/diaterysummary"
+            colors={colors}
+            icon={<HomeOutlined />}
+          />
+
           <Item
             title="Settings"
             path={`/app/usersettings/${userId}`}
