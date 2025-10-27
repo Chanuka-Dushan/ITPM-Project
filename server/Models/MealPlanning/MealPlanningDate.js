@@ -1,9 +1,9 @@
 import mongoose from "mongoose";
 
 const mealSchema = new mongoose.Schema({
-    UserName: { type: String, required: true },
-    dayspreferred: { type: String, required: true },
-    calorie: { type: Number, required: true, min: 0 },
+    UserName: { type: String, },
+    dayspreferred: { type: String, },
+    calorie: { type: Number, min: 0 },
     breakfast: { type: String },
     lunch: { type: String },
     dinner: { type: String },

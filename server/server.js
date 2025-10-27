@@ -18,15 +18,15 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 const MONGO_URI = process.env.MONGO_URI;
-const ALLOWED_ORIGIN = process.env.ALLOWED_ORIGIN || "http://localhost:3000"; // Default to localhost if not set  
+ 
 
 // Middleware
-const corsOptions = {
-  origin: ALLOWED_ORIGIN,
-  credentials: true, // Enable this if you're using cookies or HTTP authentication
-};
+// const corsOptions = {
+//   origin: ALLOWED_ORIGIN,
+//   credentials: true, // Enable this if you're using cookies or HTTP authentication
+// };
 
-app.use(cors(corsOptions));
+app.use(cors);
 app.use(express.json());
 
 app.use('/api/mealplans', mealPlanningRoute);

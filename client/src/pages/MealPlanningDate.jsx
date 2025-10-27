@@ -58,7 +58,7 @@ const MealPlanningDate = () => {
         }
         const data = await response.json();
         
-        // If data exists, update the states with fetched values
+      
         if (data && data.length > 0) {
           const latestData = data[data.length - 1]; // Get the most recent entry
           
@@ -233,6 +233,7 @@ const MealPlanningDate = () => {
     
     const formSubmission = {
       ...formData,
+      UserName:formData.name||"user",
       calorie: parseInt(formData.calorie) || 30,
       dayspreferred: daysOfWeek.join(", "),
       mealSchedule,
